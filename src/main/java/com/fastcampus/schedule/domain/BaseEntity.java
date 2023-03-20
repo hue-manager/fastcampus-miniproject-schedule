@@ -23,7 +23,7 @@ public abstract class BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@CreatedDate
-	private LocalDateTime createdDate;
+	private LocalDateTime createdAt;
 	@LastModifiedDate
-	private LocalDateTime modifiedDate;
+	private LocalDateTime modifiedAt;
 }
