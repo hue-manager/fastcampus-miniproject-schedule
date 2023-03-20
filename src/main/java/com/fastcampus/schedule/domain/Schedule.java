@@ -19,7 +19,7 @@ import lombok.Getter;
 @Entity
 public class Schedule extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "user_id")
 	private User user;
 	@Enumerated(EnumType.STRING)
 	private Category category;
