@@ -15,7 +15,7 @@ import lombok.Getter;
 public class LoginLog extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "user_id")
 	private User user;
 	private LocalDateTime loginTime;
 	private String agent;

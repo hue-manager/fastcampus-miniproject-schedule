@@ -22,7 +22,7 @@ public class User extends BaseEntity {
 	@Column(nullable = false, unique = true)
 	private String email;
 	@Column(nullable = false)
-	private String memberName;
+	private String userName;
 	@Column(nullable = false)
 	private String nickname;
 	@Column(nullable = false)
@@ -31,17 +31,17 @@ public class User extends BaseEntity {
 	private String phoneNumber;
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "user")
 	private List<Schedule> schedules = new ArrayList<>();
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "user")
 	private List<LoginLog> logs = new ArrayList<>();
 
 	protected User() {
 	}
 
-	private User(String email, String memberName, String nickname, String password, String phoneNumber, Role role) {
+	private User(String email, String userName, String nickname, String password, String phoneNumber, Role role) {
 		this.email = email;
-		this.memberName = memberName;
+		this.userName = userName;
 		this.nickname = nickname;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
@@ -49,11 +49,11 @@ public class User extends BaseEntity {
 	}
 
 	public static User of(String email,
-						  String memberName,
+						  String userName,
 						  String nickname,
 						  String password,
 						  String phoneNumber,
 						  Role role) {
-		return new User(email, memberName, nickname, password, phoneNumber, role);
+		return new User(email, userName, nickname, password, phoneNumber, role);
 	}
 }
