@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.domain.constant;
+package com.fastcampus.schedule.user.constant;
 
 public enum Role {
 	ROLE_USER("일반"),

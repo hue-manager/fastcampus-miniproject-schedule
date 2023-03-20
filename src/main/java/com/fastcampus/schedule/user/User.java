@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.domain;
+package com.fastcampus.schedule.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fastcampus.schedule.domain.constant.Role;
+import com.fastcampus.schedule.BaseEntity;
+import com.fastcampus.schedule.loginlog.LoginLog;
+import com.fastcampus.schedule.schedules.Schedule;
+import com.fastcampus.schedule.user.constant.Role;
 
 import lombok.Getter;
 
@@ -23,8 +26,6 @@ public class User extends BaseEntity {
 	private String email;
 	@Column(nullable = false)
 	private String userName;
-	@Column(nullable = false)
-	private String nickname;
 	@Column(nullable = false)
 	private String password;
 	@Column(nullable = false)
@@ -39,10 +40,9 @@ public class User extends BaseEntity {
 	protected User() {
 	}
 
-	private User(String email, String userName, String nickname, String password, String phoneNumber, Role role) {
+	private User(String email, String userName, String password, String phoneNumber, Role role) {
 		this.email = email;
 		this.userName = userName;
-		this.nickname = nickname;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.role = role;
@@ -50,10 +50,9 @@ public class User extends BaseEntity {
 
 	public static User of(String email,
 						  String userName,
-						  String nickname,
 						  String password,
 						  String phoneNumber,
 						  Role role) {
-		return new User(email, userName, nickname, password, phoneNumber, role);
+		return new User(email, userName, password, phoneNumber, role);
 	}
 }

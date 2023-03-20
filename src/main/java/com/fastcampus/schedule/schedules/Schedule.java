@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.domain;
+package com.fastcampus.schedule.schedules;
 
 import java.time.LocalDate;
 
@@ -11,7 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fastcampus.schedule.domain.constant.Category;
+import com.fastcampus.schedule.BaseEntity;
+import com.fastcampus.schedule.schedules.constant.Category;
+import com.fastcampus.schedule.user.User;
 
 import lombok.Getter;
 

@@ -1,8 +1,7 @@
-package com.fastcampus.schedule.domain;
+package com.fastcampus.schedule;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

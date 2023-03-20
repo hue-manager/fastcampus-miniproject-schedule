@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.domain.constant;
+package com.fastcampus.schedule.schedules.constant;
 
 public enum Category {
 	VACATION("연차"),
