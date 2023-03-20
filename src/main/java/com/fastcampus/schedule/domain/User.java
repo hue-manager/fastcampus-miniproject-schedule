@@ -8,14 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fastcampus.schedule.domain.constant.Role;
 
 import lombok.Getter;
 
-@Entity
 @Getter
-public class Member extends BaseEntity {
+@Entity
+@Table(name = "USERS")
+public class User extends BaseEntity {
 
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -34,10 +36,10 @@ public class Member extends BaseEntity {
 	@OneToMany(mappedBy = "member")
 	private List<LoginLog> logs = new ArrayList<>();
 
-	protected Member() {
+	protected User() {
 	}
 
-	private Member(String email, String memberName, String nickname, String password, String phoneNumber, Role role) {
+	private User(String email, String memberName, String nickname, String password, String phoneNumber, Role role) {
 		this.email = email;
 		this.memberName = memberName;
 		this.nickname = nickname;
@@ -46,12 +48,12 @@ public class Member extends BaseEntity {
 		this.role = role;
 	}
 
-	public static Member of(String email,
-							String memberName,
-							String nickname,
-							String password,
-							String phoneNumber,
-							Role role) {
-		return new Member(email, memberName, nickname, password, phoneNumber, role);
+	public static User of(String email,
+						  String memberName,
+						  String nickname,
+						  String password,
+						  String phoneNumber,
+						  Role role) {
+		return new User(email, memberName, nickname, password, phoneNumber, role);
 	}
 }

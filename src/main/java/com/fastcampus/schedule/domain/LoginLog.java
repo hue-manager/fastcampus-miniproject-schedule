@@ -16,7 +16,7 @@ public class LoginLog extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
-	private Member member;
+	private User user;
 	private LocalDateTime loginTime;
 	private String agent;
 	private String clientIp;
@@ -24,17 +24,17 @@ public class LoginLog extends BaseEntity {
 	protected LoginLog() {
 	}
 
-	private LoginLog(Member member, LocalDateTime loginTime, String agent, String clientIp) {
-		this.member = member;
+	private LoginLog(User user, LocalDateTime loginTime, String agent, String clientIp) {
+		this.user = user;
 		this.loginTime = loginTime;
 		this.agent = agent;
 		this.clientIp = clientIp;
 	}
 
-	public static LoginLog of(Member member,
+	public static LoginLog of(User user,
 							  LocalDateTime loginTime,
 							  String agent,
 							  String clientIp) {
-		return new LoginLog(member, loginTime, agent, clientIp);
+		return new LoginLog(user, loginTime, agent, clientIp);
 	}
 }
