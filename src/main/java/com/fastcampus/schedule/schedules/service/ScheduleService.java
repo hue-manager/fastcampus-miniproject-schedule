@@ -53,7 +53,7 @@ public class ScheduleService {
 
 		//유저와 일정을 쓴 유저와 맞는지 확인
 		if (schedule.getUser() != user) {
-			throw new ScheduleException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, scheduleId));
+			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
 
 		}
 
@@ -69,7 +69,7 @@ public class ScheduleService {
 		Schedule schedule = getScheduleOrException(scheduleId);
 
 		if (schedule.getUser() != user) { // 작성자와 유저정보와 같은지 확인
-			throw new ScheduleException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, scheduleId));
+			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
 
 		}
 		//작성자로 조회후 삭제
