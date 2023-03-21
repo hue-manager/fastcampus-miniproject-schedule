@@ -1,5 +1,7 @@
 package com.fastcampus.schedule.schedules.service;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +15,6 @@ import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.EntityNotFoundException;
-
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -26,16 +26,15 @@ public class ScheduleService {
 	//유저 확인 로직(중복제거위해 메소드로 뺐음)
 	private User getUserOrException(String userName) {
 		return userRepository.findByUserName(userName).orElseThrow(() ->
-				new EntityNotFoundException("없는 계정 입니다."));
+																	   new EntityNotFoundException("없는 계정 입니다."));
 	}
 
 	//등록일정 확인 로직(중복제거위해 메소드로 뺐음)
 	private Schedule getScheduleOrException(Long scheduleId) {
 		return scheduleRepository.findById(scheduleId).orElseThrow(() ->
-				new EntityNotFoundException("등록한 일정이 없습니다."));
+																	   new EntityNotFoundException("등록한 일정이 없습니다."));
 
 	}
-
 
 	public void save(ScheduleRequest request, String userName) {
 
