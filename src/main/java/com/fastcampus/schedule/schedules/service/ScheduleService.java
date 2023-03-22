@@ -1,5 +1,7 @@
 package com.fastcampus.schedule.schedules.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,14 @@ public class ScheduleService {
 
 	private final ScheduleRepository scheduleRepository;
 	private final UserRepository userRepository;
+
+	public Schedule findById(Long scheduleId) {
+		return getScheduleOrException(scheduleId);
+	}
+
+	public Page<Schedule> findAllByUserId(Long userId, Pageable pageable) {
+		return scheduleRepository.findAllByUserId(userId, pageable);
+	}
 
 	public void save(ScheduleRequest request, String userName) {
 
@@ -66,5 +76,4 @@ public class ScheduleService {
 		return scheduleRepository.findById(scheduleId)
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
-
 }

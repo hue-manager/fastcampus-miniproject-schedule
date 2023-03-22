@@ -3,6 +3,7 @@ package com.fastcampus.schedule.schedules.controller;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,10 +30,14 @@ public class ScheduleController {
 
 	@GetMapping("/{scheduleId}")
 	public HttpEntity<ScheduleResponse> getInfo(@PathVariable Long scheduleId) {
+		Schedule entity = scheduleService.findById(scheduleId);
+		return ResponseEntity.ok(ScheduleResponse.fromEntity(entity));
 	}
 
 	@GetMapping("/schedules/{userId}")
-	public HttpEntity<Page<ScheduleResponse>> getList(@PathVariable Long userId) {
+	public HttpEntity<Page<ScheduleResponse>> getList(@PathVariable Long userId, Pageable pageable) {
+		Page<Schedule> schedules = scheduleService.findAllByUserId(userId, pageable);
+		return ResponseEntity.ok(schedules.map(ScheduleResponse::fromEntity));
 	}
 
 	@PostMapping("/save")  //저장
