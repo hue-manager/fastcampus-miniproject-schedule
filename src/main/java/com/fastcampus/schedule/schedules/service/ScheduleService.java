@@ -45,9 +45,11 @@ public class ScheduleService {
 		Schedule schedule = getScheduleOrException(scheduleId);
 
 		//유저와 일정을 쓴 유저와 맞는지 확인
-		if (schedule.getUser() != user) {
+		if (!schedule.getUser().equals(user)) {
 			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
 		}
+
+		Schedule entity = ScheduleRequest.toEntity(request, user);
 		//변경 후 저장
 		return scheduleRepository.saveAndFlush(schedule);
 	}
@@ -57,7 +59,7 @@ public class ScheduleService {
 		User user = getUserOrException(userName);
 		Schedule schedule = getScheduleOrException(scheduleId);
 
-		if (schedule.getUser() != user) { // 작성자와 유저정보와 같은지 확인
+		if (!schedule.getUser().equals(user)) { // 작성자와 유저정보와 같은지 확인
 			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
 		}
 		//작성자로 조회후 삭제
