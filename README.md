@@ -20,10 +20,10 @@
     
 ### 4. 구성원
     1. User domain
-      - 이진혁
-      - 조윤영 <https://github.com/dont-octopus>
+      - 이진혁 HARIBO033
+      - 조윤영 dont-octopus
       
-     2. Schedule domain
-      - 이승환
-      - 조유성
-      - 이재
+    2. Schedule domain
+      - 이승환 seocho507
+      - 조유성 yuseong00
+      - 이재훈 flyingRKO
