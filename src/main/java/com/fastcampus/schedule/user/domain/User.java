@@ -62,12 +62,12 @@ public class User extends BaseEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
-		return Objects.equals(userName, user.userName);
+		return Objects.equals(email, user.email);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userName);
+		return Objects.hash(email);
 	}
 
 
