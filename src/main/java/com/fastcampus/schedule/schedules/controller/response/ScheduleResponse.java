@@ -4,12 +4,14 @@ import java.time.LocalDate;
 
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.constant.Category;
-import com.fastcampus.schedule.user.User;
+import com.fastcampus.schedule.user.domain.User;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class ScheduleResponse {
 

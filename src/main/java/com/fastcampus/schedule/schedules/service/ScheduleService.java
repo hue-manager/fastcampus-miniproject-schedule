@@ -10,7 +10,7 @@ import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.repository.ScheduleRepository;
-import com.fastcampus.schedule.user.User;
+import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

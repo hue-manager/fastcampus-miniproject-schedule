@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fastcampus.schedule.BaseEntity;
 import com.fastcampus.schedule.loginlog.LoginLog;
@@ -18,7 +23,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "USERS")
 public class User extends BaseEntity {
-
 
 	@Column(nullable = false, unique = true)
 	@Setter
@@ -59,9 +63,11 @@ public class User extends BaseEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		User user = (User) o;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		User user = (User)o;
 		return Objects.equals(email, user.email);
 	}
 
@@ -69,6 +75,5 @@ public class User extends BaseEntity {
 	public int hashCode() {
 		return Objects.hash(email);
 	}
-
 
 }
