@@ -61,6 +61,7 @@ public class User extends BaseEntity {
 		return new User(email, userName, password, phoneNumber, role);
 	}
 
+<<<<<<< HEAD:src/main/java/com/fastcampus/schedule/user/domain/User.java
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -69,11 +70,25 @@ public class User extends BaseEntity {
 			return false;
 		User user = (User)o;
 		return Objects.equals(email, user.email);
+=======
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return Objects.equals(userName, user.userName);
+>>>>>>> main:src/main/java/com/fastcampus/schedule/user/User.java
 	}
 
 	@Override
 	public int hashCode() {
+<<<<<<< HEAD:src/main/java/com/fastcampus/schedule/user/domain/User.java
 		return Objects.hash(email);
 	}
 
+=======
+		return Objects.hash(userName);
+	}
+>>>>>>> main:src/main/java/com/fastcampus/schedule/user/User.java
 }
