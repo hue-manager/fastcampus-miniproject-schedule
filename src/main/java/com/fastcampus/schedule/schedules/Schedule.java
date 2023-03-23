@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 
 import com.fastcampus.schedule.BaseEntity;
 import com.fastcampus.schedule.schedules.constant.Category;
-import com.fastcampus.schedule.user.User;
+import com.fastcampus.schedule.user.domain.User;
 
 import lombok.Getter;
 

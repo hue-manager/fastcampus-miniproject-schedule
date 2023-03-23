@@ -1,20 +1,20 @@
 package com.fastcampus.schedule.user.service;
 
-import com.fastcampus.schedule.user.constant.Role;
+import org.springframework.stereotype.Service;
+
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.domain.UserRequest;
 import com.fastcampus.schedule.user.domain.UserResponse;
 import com.fastcampus.schedule.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
+
 
     // 권한 수정
     public UserResponse editUserRole(Long userId, UserRequest request) {
@@ -37,7 +37,8 @@ public class UserService {
         return UserResponse.fromEntity(user);
     }
 
-    //TODO 전체 조회
+
+	//TODO 전체 조회
     /*
     public Page<UserResponse> getUserList(Role role, Pageable pageable) {
         // null인 경우는 전체
@@ -69,7 +70,4 @@ public class UserService {
                 -> new IllegalArgumentException("해당하는 유저가 없습니다"));
         return user;
     }
-
-
-
 }
