@@ -2,7 +2,14 @@ package com.fastcampus.schedule.user.service;
 
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.user.constant.Role;
-import com.fastcampus.schedule.user.domain.*;
+import com.fastcampus.schedule.user.domain.User;
+import com.fastcampus.schedule.user.domain.UserDto;
+import com.fastcampus.schedule.user.domain.UserRequest;
+import com.fastcampus.schedule.user.domain.UserResponse;
+import com.fastcampus.schedule.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,6 +35,16 @@ public class UserService {
 		}
 		return UserResponse.fromEntity(user);
 	}
+
+    //회원 가입
+
+    public void signUp(User user) throws Exception{
+        //회원가입하려눈 userName으로 회원가입된 user가 있는지
+//        if(userRepository.findByUserName(user.getUserName()) != null){
+//            throw new Exception("유저네임이 존재합니다");
+//        }
+        userRepository.save(user);
+    }
 
     // 권한 수정
     public UserResponse editUserRole(Long userId, UserRoleRequest request) {
