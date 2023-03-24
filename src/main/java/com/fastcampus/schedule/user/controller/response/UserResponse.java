@@ -1,8 +1,13 @@
-package com.fastcampus.schedule.user.domain;
+package com.fastcampus.schedule.user.controller.response;
 
 import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.User;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

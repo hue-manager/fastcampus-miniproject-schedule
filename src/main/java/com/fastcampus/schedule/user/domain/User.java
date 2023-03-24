@@ -71,8 +71,6 @@ public class User extends BaseEntity {
 		return Objects.equals(getId(), user.getId());
 	}
 
-
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(email);

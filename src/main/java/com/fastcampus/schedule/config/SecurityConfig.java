@@ -17,42 +17,42 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .mvcMatchers(
-                                HttpMethod.GET,
-                                "/" // TODO : 앞으로 경로 추가
-                        ).permitAll()
-                        .mvcMatchers(
-                                HttpMethod.POST,
-                                "/user/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin()
-                .loginPage("/user/login").defaultSuccessUrl("/?loginSuccess=true")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .and()
-                .csrf().disable()
-                .build();
-    }
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		return http
+			.authorizeHttpRequests(auth -> auth
+				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+				.mvcMatchers(
+					HttpMethod.GET,
+					"/" // TODO : 앞으로 경로 추가
+				).permitAll()
+				.mvcMatchers(
+					HttpMethod.POST,
+					"/user/**"
+				).permitAll()
+				.anyRequest().authenticated()
+			)
+			.formLogin()
+			.loginPage("/user/login").defaultSuccessUrl("/?loginSuccess=true")
+			.and()
+			.logout()
+			.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+			.logoutSuccessUrl("/")
+			.invalidateHttpSession(true)
+			.and()
+			.csrf().disable()
+			.build();
+	}
 
-    @Bean //해당 메서드에  리턴되는 오브젝트를 IoC로 등록해준다!
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean //해당 메서드에  리턴되는 오브젝트를 IoC로 등록해준다!
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
+	@Bean
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws
+		Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 
 }

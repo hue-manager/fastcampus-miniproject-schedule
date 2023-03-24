@@ -1,7 +1,5 @@
 package com.fastcampus.schedule.user.controller;
 
-import com.fastcampus.schedule.user.domain.UserInfoRequest;
-import com.fastcampus.schedule.user.domain.UserRoleRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.schedule.user.constant.Role;
-import com.fastcampus.schedule.user.domain.UserResponse;
+import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
+import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
+import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,6 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
-
-
 
 	// 유저 권한 수정
 	@PostMapping("/{userId}/editrole")

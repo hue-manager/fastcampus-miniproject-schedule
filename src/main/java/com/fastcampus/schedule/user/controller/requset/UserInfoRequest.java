@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.user.domain;
+package com.fastcampus.schedule.user.controller.requset;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 public class UserInfoRequest {
 
-    private String email;
-    private String userName;
+	private String email;
+	private String userName;
 }
