@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.controller;
+package com.fastcampus.schedule.user.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,14 +13,9 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class SignUpUserController {
+public class SignUpController {
 
 	private final UserService userService;
-
-	//    @GetMapping("/signUp")
-	//    public String signup() {
-	//        return "signup_form";
-	//    }
 
 	@PostMapping("/signUp")
 	public void SignUp(@RequestBody User user) throws Exception {
