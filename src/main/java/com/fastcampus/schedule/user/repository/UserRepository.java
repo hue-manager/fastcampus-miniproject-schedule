@@ -12,5 +12,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 일반유저리스트만 or 관리자리스트만 or 전체리스트
     Page<UserResponse> findAllUsersByRole(Role role, Pageable pageable);
 
+    //회원 가입하려는 유저이름이 존재하는지 검사
+    User findByUserName(String userName);
+
 
 }

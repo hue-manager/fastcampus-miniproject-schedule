@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
+    @Bean //해당 메서드에  리턴되는 오브젝트를 IoC로 등록해준다!
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
