@@ -16,3 +16,8 @@ spring:
   properties:
     hibernate.format_sql: true
     hibernate.default_batch_fetch_size: 100
+
+jwt:
+  secret-key: fastcampus-mini-project-2
+  # 2 hours
+  token.expired-time-ms: 7200000

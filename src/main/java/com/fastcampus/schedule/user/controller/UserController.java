@@ -45,7 +45,7 @@ public class UserController {
 												Pageable pageable) {
 		// TODO
 		//        Page<UserResponse> userList = userService.getUserList(role, pageable);
-		// modelMap.addAttribute("Users", userList);
+		// modelMap.addAttribute("users", userList);
 		return ResponseEntity.ok().body(modelMap);
 	}
 
@@ -53,7 +53,7 @@ public class UserController {
 	@GetMapping("/{userId}")
 	public ResponseEntity<ModelMap> getUser(@PathVariable Long userId, ModelMap modelMap) {
 		UserResponse user = userService.getUser(userId);
-		modelMap.addAttribute("User", user);
+		modelMap.addAttribute("user", user);
 		return ResponseEntity.ok().body(modelMap);
 	}
 
