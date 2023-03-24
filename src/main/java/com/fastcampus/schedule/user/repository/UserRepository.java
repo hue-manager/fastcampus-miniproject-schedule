@@ -12,7 +12,7 @@ import com.fastcampus.schedule.user.domain.UserResponse;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	Page<UserResponse> findAllUsersByRole(Role role, Pageable pageable);
+	Page<User> findAllUsersByRole(Role role, Pageable pageable);
 
 	Optional<User> findByUserName(String userName);
 }
