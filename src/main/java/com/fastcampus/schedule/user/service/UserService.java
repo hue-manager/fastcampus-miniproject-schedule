@@ -4,10 +4,12 @@ import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.controller.requset.SignUpRequest;
 import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
 import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
@@ -21,14 +23,12 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder encoder;
 
 	//회원 가입
-	public void signUp(User user) throws Exception {
-		//회원가입하려눈 userName으로 회원가입된 user가 있는지
-		//        if(userRepository.findByUserName(user.getUserName()) != null){
-		//            throw new Exception("유저네임이 존재합니다");
-		//        }
-		userRepository.save(user);
+	public void signUp(SignUpRequest request) {
+		userRepository.findByEmail(request.getEmail()).ifPresent(user -> new ScheduleException(DUPLICATED_EMAIL, ""));
+		userRepository.save(SignUpRequest.toEntity(request, encoder));
 	}
 
 	// 권한 수정
