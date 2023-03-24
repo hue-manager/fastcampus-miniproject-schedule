@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 
 import com.fastcampus.schedule.BaseEntity;
 import com.fastcampus.schedule.schedules.constant.Category;
+import com.fastcampus.schedule.schedules.util.Period;
 import com.fastcampus.schedule.user.domain.User;
 
 import lombok.Getter;
@@ -48,5 +49,9 @@ public class Schedule extends BaseEntity {
 							  LocalDate endDate,
 							  String memo) {
 		return new Schedule(user, category, startDate, endDate, memo);
+	}
+
+	public boolean isOverlapped(Period period) {
+		return Period.of(this.getStartDate(), this.getEndDate()).isOverlapped(period);
 	}
 }

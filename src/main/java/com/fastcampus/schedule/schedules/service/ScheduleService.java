@@ -1,5 +1,7 @@
 package com.fastcampus.schedule.schedules.service;
 
+import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
+import com.fastcampus.schedule.schedules.util.Period;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,11 @@ import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Transactional
@@ -78,4 +85,23 @@ public class ScheduleService {
 		return scheduleRepository.findById(scheduleId)
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
+
+	public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
+		final Period period = Period.of(date, date);
+		return getSchedulesByPeriod(userId, period);
+	}
+
+	private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
+		return  Stream(scheduleRepository
+				.findAllByUser_Id(userId)
+				.stream()
+				.filter(schedule -> schedule.isOverlapped(period))
+				.map(schedule -> ScheduleResponse.fromEntity(schedule))  //이게 왜 에러??
+		).collect(toList());
+
+
+	}
+
+
+
 }
