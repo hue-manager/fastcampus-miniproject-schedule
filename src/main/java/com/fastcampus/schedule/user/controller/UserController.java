@@ -20,6 +20,8 @@ import com.fastcampus.schedule.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.Valid;
+
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @RestController
@@ -31,14 +33,14 @@ public class UserController {
 
 	// 유저 권한 수정
 	@PostMapping("/{userId}/editrole")
-	public ResponseEntity<Void> editUserRole(@PathVariable Long userId, @RequestBody UserRoleRequest request) {
+	public ResponseEntity<Void> editUserRole(@PathVariable Long userId, @Valid @RequestBody UserRoleRequest request) {
 		userService.editUserRole(userId, request);
 		return ResponseEntity.ok(null);
 	}
 
 	// 유저 정보 수정
 	@PostMapping("/{userId}/editinfo")
-	public ResponseEntity<Void> editUserInfo(@PathVariable Long userId, @RequestBody UserInfoRequest request) {
+	public ResponseEntity<Void> editUserInfo(@PathVariable Long userId, @Valid @RequestBody UserInfoRequest request) {
 		userService.editUserInfo(userId, request);
 		return ResponseEntity.ok(null);
 	}
