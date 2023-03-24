@@ -5,6 +5,7 @@ import com.fastcampus.schedule.user.constant.Role;
 import com.fastcampus.schedule.user.domain.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
 import com.fastcampus.schedule.user.repository.UserRepository;
@@ -19,6 +20,14 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
+	// 권한 수정
+	public UserResponse editUserRole(Long userId, UserRequest request) {
+		User user = checkExist(userId);
+		if (!user.getRole().equals(request.getRole())) {
+			user.setRole(request.getRole());
+		}
+		return UserResponse.fromEntity(user);
+	}
 
     // 권한 수정
     public UserResponse editUserRole(Long userId, UserRoleRequest request) {
@@ -40,7 +49,6 @@ public class UserService {
         }
         return UserResponse.fromEntity(user);
     }
-
 
     // 전체 조회
     public Page<UserResponse> getUserList(Role role, Pageable pageable) {
@@ -65,4 +73,5 @@ public class UserService {
                 -> new ScheduleException(USER_NOT_FOUND, USER_NOT_FOUND.getMessage()));
         return user;
     }
+
 }
