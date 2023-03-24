@@ -70,12 +70,12 @@ public class ScheduleController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/{userId}")
-	public List<ScheduleResponse> getSchedulesByDay(
-		@PathVariable Long userId,
-		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-	) {
-		return scheduleService.getSchedulesByDay(date == null ? LocalDate.now() : date, userId);
-	}
+	// @GetMapping("/{userId}")
+	// public List<ScheduleResponse> getSchedulesByDay(
+	// 	@PathVariable Long userId,
+	// 	@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+	// ) {
+	// 	return scheduleService.getSchedulesByDay(date == null ? LocalDate.now() : date, userId);
+	// }
 
 }
