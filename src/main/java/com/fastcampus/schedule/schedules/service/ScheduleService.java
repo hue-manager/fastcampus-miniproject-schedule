@@ -86,19 +86,19 @@ public class ScheduleService {
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
 
-	// public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
-	// 	final Period period = Period.of(date, date);
-	// 	return getSchedulesByPeriod(userId, period);
-	// }
+	public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
+		final Period period = Period.of(date, date);
+		return getSchedulesByPeriod(userId, period);
+	}
 
-	// private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
-	// 	return Stream(scheduleRepository
-	// 					  .findAllByUser_Id(userId)
-	// 					  .stream()
-	// 					  .filter(schedule -> schedule.isOverlapped(period))
-	// 					  .map(schedule -> ScheduleResponse.fromEntity(schedule))  //이게 왜 에러??
-	// 	).collect(toList());
-	//
-	// }
+	private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
+		return scheduleRepository
+			.findAllByUser_Id(userId)
+			.stream()
+			.filter(schedule -> schedule.isOverlapped(period))
+			.map(schedule -> ScheduleResponse.fromEntity(schedule))
+			.collect(toList());
+
+	}
 
 }
