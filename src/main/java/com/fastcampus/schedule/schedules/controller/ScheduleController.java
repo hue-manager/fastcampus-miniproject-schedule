@@ -1,5 +1,8 @@
 package com.fastcampus.schedule.schedules.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -8,7 +11,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
@@ -16,9 +25,6 @@ import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.service.ScheduleService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/schedules")
@@ -66,11 +72,10 @@ public class ScheduleController {
 
 	@GetMapping("/{userId}")
 	public List<ScheduleResponse> getSchedulesByDay(
-			@PathVariable Long userId ,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+		@PathVariable Long userId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByDay(date == null ? LocalDate.now() : date, userId);
 	}
-
 
 }
