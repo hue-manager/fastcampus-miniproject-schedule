@@ -114,7 +114,7 @@ public class ScheduleService {
 
 	public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
 		final Period period = Period.of(date, date);
-		return getSchedulesByPeriod(userId, period);
+		return getSchedulesByPeriod2(userId, period);
 	}
 
 	private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
@@ -125,6 +125,18 @@ public class ScheduleService {
 			.map(schedule -> ScheduleResponse.fromEntity(schedule))
 			.collect(toList());
 
+	}
+
+	private List<ScheduleResponse> getSchedulesByPeriod2(Long userId, Period period) {
+		List<Schedule> schedules = scheduleRepository
+				.findSchedulesByUserAndPeriod(
+						userId,
+						period.getStartDate(),
+						period.getEndDate());
+
+		return schedules.stream()
+				.map(ScheduleResponse::fromEntity)
+				.collect(toList());
 	}
 
 	private static int getRemainVacationCount(ScheduleRequest request, User user) {
