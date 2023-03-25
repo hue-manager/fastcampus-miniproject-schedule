@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fastcampus.schedule.schedules.constant.Category;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.service.ScheduleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,11 +36,15 @@ public class ScheduleControllerTest {
 	void 연차_등록() throws Exception {
 		mockMvc.perform(post("/schedules/save")
 							.contentType(MediaType.APPLICATION_JSON)
-							.content(mapper.writeValueAsBytes(new ScheduleRequest("WORK",
-															  LocalDate.of(2023, 03, 23),
-															  LocalDate.of(2023, 03, 25),
-															  "memo"))))
+							.content(mapper.writeValueAsBytes(new ScheduleRequest(Category.VACATION.name(),
+																				  LocalDate.of(2023, 03, 23),
+																				  LocalDate.of(2023, 03, 25),
+																				  "memo"))))
 			   .andDo(print())
 			.andExpect(status().isOk());
+		
 	}
+
+
+
 }

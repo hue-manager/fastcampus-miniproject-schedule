@@ -5,6 +5,7 @@ import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LoginService {
 
 	private final UserRepository userRepository;

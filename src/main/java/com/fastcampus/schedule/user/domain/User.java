@@ -44,6 +44,8 @@ public class User extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Setter
 	private Role role;
+	@Setter
+	private Integer vacationCount = 15;
 	@OneToMany(mappedBy = "user")
 	private List<Schedule> schedules = new ArrayList<>();
 	@OneToMany(mappedBy = "user")

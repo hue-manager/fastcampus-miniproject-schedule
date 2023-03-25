@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.schedules.Schedule;
+import com.fastcampus.schedule.schedules.constant.Category;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.repository.ScheduleRepository;
@@ -38,12 +39,19 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUserId(userId, pageable);
 	}
 
-	public void save(ScheduleRequest request, String userName) {
+	public Schedule save(ScheduleRequest request, String userName) {
 
 		User user = getUserOrException(userName);
 
+		if (getRemainVacationCount(request, user) < 0) {
+			throw new ScheduleException(ErrorCode.NOT_ENOUGH_COUNT, "연차가 부족합니다.");
+		}
+		// 연차 삭감
+		cutVacationCount(request, user);
+
 		Schedule entity = ScheduleRequest.toEntity(request, user);
 		scheduleRepository.save(entity);
+		return entity;
 	}
 
 	public Schedule edit(Long scheduleId, ScheduleRequest request, String userName) {
@@ -56,6 +64,18 @@ public class ScheduleService {
 			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
 		}
 
+		// 연차 원상복구
+		if (schedule.getCategory().equals(Category.VACATION)) {
+			user.setVacationCount(
+				user.getVacationCount() + (schedule.getEndDate().compareTo(schedule.getStartDate()) + 1));
+		}
+
+		if (getRemainVacationCount(request, user) < 0) {
+			throw new ScheduleException(ErrorCode.NOT_ENOUGH_COUNT, "연차가 부족합니다.");
+		}
+		// 연차 삭감
+		cutVacationCount(request, user);
+
 		Schedule entity = ScheduleRequest.toEntity(request, user);
 		//변경 후 저장
 		return scheduleRepository.saveAndFlush(schedule);
@@ -65,6 +85,12 @@ public class ScheduleService {
 
 		User user = getUserOrException(userName);
 		Schedule schedule = getScheduleOrException(scheduleId);
+
+		// 연차 복구
+		if (schedule.getCategory().equals(Category.VACATION)) {
+			user.setVacationCount(
+				user.getVacationCount() + (schedule.getEndDate().compareTo(schedule.getStartDate()) + 1));
+		}
 
 		if (!schedule.getUser().equals(user)) { // 작성자와 유저정보와 같은지 확인
 			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
@@ -99,6 +125,16 @@ public class ScheduleService {
 			.map(schedule -> ScheduleResponse.fromEntity(schedule))
 			.collect(toList());
 
+	}
+
+	private static int getRemainVacationCount(ScheduleRequest request, User user) {
+		return user.getVacationCount() - (request.getEndDate().compareTo(request.getStartDate()) + 1);
+	}
+
+	private static void cutVacationCount(ScheduleRequest request, User user) {
+		if (request.getCategory().equals(Category.VACATION.name())) {
+			user.setVacationCount(getRemainVacationCount(request, user));
+		}
 	}
 
 }

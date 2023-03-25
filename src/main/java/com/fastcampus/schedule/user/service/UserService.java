@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.user.constant.Role;
@@ -18,6 +19,7 @@ import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {

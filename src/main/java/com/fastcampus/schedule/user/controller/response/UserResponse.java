@@ -19,6 +19,7 @@ public class UserResponse {
 	private String userName;
 	private String phoneNumber;
 	private Role role;
+	private Integer vacationCount;
 
 	public static UserResponse fromEntity(User user) {
 		return UserResponse.builder()
@@ -26,6 +27,7 @@ public class UserResponse {
 						   .userName(user.getUserName())
 						   .phoneNumber(user.getPhoneNumber())
 						   .role(user.getRole())
+						   .vacationCount(user.getVacationCount())
 						   .build();
 	}
 }
