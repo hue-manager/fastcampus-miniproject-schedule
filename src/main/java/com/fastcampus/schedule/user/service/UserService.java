@@ -71,6 +71,15 @@ public class UserService {
 											  -> new ScheduleException(USER_NOT_FOUND, USER_NOT_FOUND.getMessage()));
 	}
 
+	public void confirm(Long userId) {
+		User user = checkExist(userId);
+		if (user.getRole().equals(Role.DEFAULT)) {
+			user.setRole(Role.ROLE_USER);
+		} else {
+			throw new ScheduleException(USER_NOT_FOUND, "");
+		}
+	}
+
 	// 유저 존재 여부 체크 공통 메서드
 	public User checkExist(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(()

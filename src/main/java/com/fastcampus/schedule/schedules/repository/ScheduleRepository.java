@@ -15,4 +15,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 	Page<Schedule> findAllByUserId(Long userId, Pageable pageable);
 
 	List<Schedule> findAllByUser_Id(Long userId);
+
+	Page<Schedule> findAllByStatus(Pageable pageable);
 }

@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.constant.Category;
+import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.user.domain.User;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ public class ScheduleRequest {
 						   Category.valueOf(request.category),
 						   request.startDate,
 						   request.endDate,
+						   Status.WAITING,
 						   request.memo);
 	}
 }
