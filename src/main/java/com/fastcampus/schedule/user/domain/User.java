@@ -77,7 +77,7 @@ public class User extends BaseEntity {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		User user = (User)o;
-		return Objects.equals(getId(), user.getId());
+		return Objects.equals(id, user.id);
 	}
 
 	@Override
