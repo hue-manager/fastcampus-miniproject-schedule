@@ -2,6 +2,7 @@ package com.fastcampus.schedule.user.service;
 
 import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
+import com.fastcampus.schedule.user.repository.UserRedisRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +27,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder encoder;
+	private final UserRedisRepository userRedisRepository;
 
 	//회원 가입
 	public void signUp(SignUpRequest request) {
@@ -89,8 +91,8 @@ public class UserService {
 	}
 
 	public User getUserByEmail(String email) {
-		return userRepository.findByEmail(email).orElseThrow(() -> new ScheduleException(USER_NOT_FOUND,
-																						 USER_NOT_FOUND.getMessage()));
-
+		return userRedisRepository.getRedisUser(email).orElseGet(()->
+		 userRepository.findByEmail(email).orElseThrow(() -> new ScheduleException(USER_NOT_FOUND,
+																						 USER_NOT_FOUND.getMessage())));
 	}
 }

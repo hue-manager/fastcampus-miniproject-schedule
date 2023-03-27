@@ -2,6 +2,7 @@ package com.fastcampus.schedule.user.service;
 
 import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
+import com.fastcampus.schedule.user.repository.UserRedisRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ public class LoginService {
 
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder encoder;
+	private final UserRedisRepository userRedisRepository;
+
 
 	@Value("${jwt.secret-key}")
 	private String secretKey;
@@ -36,7 +39,8 @@ public class LoginService {
 			throw new ScheduleException(ErrorCode.INVALID_PASSWORD, "비밀번호를 확인해주세요.");
 		}
 
+		userRedisRepository.setRedisUser(user);
 		return JwtUtils.generateAccessToken(email, secretKey, expiredTimeMs);
-
 	}
+
 }
