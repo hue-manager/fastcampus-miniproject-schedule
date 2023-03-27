@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.fastcampus.schedule.schedules.Schedule;
+import com.fastcampus.schedule.schedules.constant.Status;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
@@ -16,5 +17,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 	List<Schedule> findAllByUser_Id(Long userId);
 
-	Page<Schedule> findAllByStatus(Pageable pageable);
+	Page<Schedule> findAllByStatus(Pageable pageable, Status status);
 }

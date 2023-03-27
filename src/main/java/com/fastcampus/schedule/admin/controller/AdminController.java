@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.service.ScheduleService;
 import com.fastcampus.schedule.user.constant.Role;

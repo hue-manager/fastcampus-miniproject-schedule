@@ -1,6 +1,7 @@
 package com.fastcampus.schedule.user.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fastcampus.schedule.BaseEntity;
 import com.fastcampus.schedule.loginlog.LoginLog;
 import com.fastcampus.schedule.schedules.Schedule;
@@ -25,7 +30,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "USERS")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,10 +84,49 @@ public class User extends BaseEntity {
 		User user = (User)o;
 		return Objects.equals(id, user.id);
 	}
+	
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email);
+		return Objects.hash(id);
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.toString()));
+	}
+
+	@Override
+	public String getUsername() {
+		return userName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+	public boolean isNotSame(String name, String compare) {
+		return name.equals(compare);
 	}
 }
 

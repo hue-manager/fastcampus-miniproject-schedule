@@ -24,7 +24,7 @@ public class UserResponse {
 	public static UserResponse fromEntity(User user) {
 		return UserResponse.builder()
 						   .email(user.getEmail())
-						   .userName(user.getUserName())
+						   .userName(user.getUsername())
 						   .phoneNumber(user.getPhoneNumber())
 						   .role(user.getRole())
 						   .vacationCount(user.getVacationCount())

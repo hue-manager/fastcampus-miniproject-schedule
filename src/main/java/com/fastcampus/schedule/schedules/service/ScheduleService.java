@@ -139,7 +139,8 @@ public class ScheduleService {
 	}
 
 	public Page<ScheduleResponse> getSchedulesByStatus(Pageable pageable) {
-		return scheduleRepository.findAllByStatus(pageable).map(ScheduleResponse::fromEntity);
+		return scheduleRepository.findAllByStatus(pageable, Status.WAITING)
+								 .map(ScheduleResponse::fromEntity);
 	}
 
 	public void confirm(Long scheduleId) {

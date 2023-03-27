@@ -45,7 +45,7 @@ public class UserService {
 	// 유저 정보 수정
 	public UserResponse editUserInfo(Long userId, UserInfoRequest request) {
 		User user = checkExist(userId);
-		if (!user.getUserName().equals(request.getUserName())) {
+		if (user.isNotSame(user.getUsername(), request.getUserName())) {
 			user.setUserName(request.getUserName());
 		}
 		if (!user.getEmail().equals(request.getEmail())) {
