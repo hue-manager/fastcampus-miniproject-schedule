@@ -2,6 +2,7 @@ package com.fastcampus.schedule.schedules.service;
 
 import static java.util.stream.Collectors.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -101,6 +102,37 @@ public class ScheduleService {
 
 	}
 
+	public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
+		final Period period = Period.of(date, date);
+		return getSchedulesByPeriod(userId, period);
+	}
+
+	public List<ScheduleResponse> getSchedulesByWeek(LocalDate startOfWeek, Long userId) {
+		if (startOfWeek.getDayOfWeek() != DayOfWeek.MONDAY) {
+			throw new IllegalArgumentException("startOfWeek must be a Monday");
+		}
+		final Period period = Period.of(startOfWeek, startOfWeek.plusDays(6));
+		return getSchedulesByPeriod(userId, period);
+	}
+
+	public List<ScheduleResponse> getSchedulesByMonth(LocalDate date, Long userId) {
+		LocalDate firstDayOfMonth = date.withDayOfMonth(1);
+		LocalDate lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
+		Period period = Period.of(firstDayOfMonth, lastDayOfMonth);
+
+		return getSchedulesByPeriod(userId, period);
+	}
+
+	public List<ScheduleResponse> getSchedulesByYear(LocalDate date, Long userId) {
+		int year = date.getYear();
+		LocalDate firstDayOfYear = LocalDate.of(year, 1, 1);
+		LocalDate lastDayOfYear = LocalDate.of(year, 12, 31);
+		Period period = Period.of(firstDayOfYear, lastDayOfYear);
+
+		return getSchedulesByPeriod(userId, period);
+	}
+
+
 	//유저 확인 로직(중복제거위해 메소드로 뺐음)
 	private User getUserOrException(String userName) {
 		return userRepository.findByUserName(userName)
@@ -113,19 +145,17 @@ public class ScheduleService {
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
 
-	public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
-		final Period period = Period.of(date, date);
-		return getSchedulesByPeriod(userId, period);
-	}
 
 	private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
-		return scheduleRepository
-			.findAllByUser_Id(userId)
-			.stream()
-			.filter(schedule -> schedule.isOverlapped(period))
-			.map(schedule -> ScheduleResponse.fromEntity(schedule))
-			.collect(toList());
+		List<Schedule> schedules = scheduleRepository
+				.findSchedulesByUserAndPeriod(
+						userId,
+						period.getStartDate(),
+						period.getEndDate());
 
+		return schedules.stream()
+				.map(ScheduleResponse::fromEntity)
+				.collect(toList());
 	}
 
 	private static int getRemainVacationCount(ScheduleRequest request, User user) {
