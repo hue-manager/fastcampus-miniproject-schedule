@@ -45,7 +45,7 @@ public class UserService {
 	// 유저 정보 수정
 	public UserResponse editUserInfo(Long userId, UserInfoRequest request) {
 		User user = checkExist(userId);
-		if (!user.getUserName().equals(request.getUserName())) {
+		if (user.isNotSame(user.getUsername(), request.getUserName())) {
 			user.setUserName(request.getUserName());
 		}
 		if (!user.getEmail().equals(request.getEmail())) {
@@ -71,6 +71,15 @@ public class UserService {
 											  -> new ScheduleException(USER_NOT_FOUND, USER_NOT_FOUND.getMessage()));
 	}
 
+	public void confirm(Long userId) {
+		User user = checkExist(userId);
+		if (user.getRole().equals(Role.DEFAULT)) {
+			user.setRole(Role.ROLE_USER);
+		} else {
+			throw new ScheduleException(USER_NOT_FOUND, "");
+		}
+	}
+
 	// 유저 존재 여부 체크 공통 메서드
 	public User checkExist(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(()
@@ -79,4 +88,9 @@ public class UserService {
 		return user;
 	}
 
+	public User getUserByEmail(String email) {
+		return userRepository.findByEmail(email).orElseThrow(() -> new ScheduleException(USER_NOT_FOUND,
+																						 USER_NOT_FOUND.getMessage()));
+
+	}
 }

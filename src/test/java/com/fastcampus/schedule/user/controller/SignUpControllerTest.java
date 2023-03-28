@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.controller;
+package com.fastcampus.schedule.user.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;

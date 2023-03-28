@@ -15,6 +15,7 @@ import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.constant.Category;
+import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.repository.ScheduleRepository;
@@ -167,4 +168,17 @@ public class ScheduleService {
 		}
 	}
 
+	public Page<ScheduleResponse> getSchedulesByStatus(Pageable pageable) {
+		return scheduleRepository.findAllByStatus(pageable, Status.WAITING)
+								 .map(ScheduleResponse::fromEntity);
+	}
+
+	public void confirm(Long scheduleId) {
+		Schedule schedule = getScheduleOrException(scheduleId);
+		if (schedule.getStatus().equals(Status.WAITING)) {
+			schedule.setStatus(Status.PERMIT);
+		} else {
+			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "");
+		}
+	}
 }

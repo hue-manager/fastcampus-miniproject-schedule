@@ -1,6 +1,6 @@
 package com.fastcampus.schedule.user.controller.requset;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fastcampus.schedule.user.constant.Role;
 
@@ -11,8 +11,12 @@ import lombok.Setter;
 @Setter
 public class UserRoleRequest {
 
-	@NotEmpty
+	@NotNull
 	private Role role;
+
+	public UserRoleRequest(){
+		this.role = role;
+	}
 
 	public UserRoleRequest(Role role) {
 		this.role = role;

@@ -11,7 +11,8 @@ public enum ErrorCode {
 	SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "Schedule not founded"),
 	DUPLICATED_EMAIL(HttpStatus.CONFLICT, "Email is duplicated"),
 	DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB Error"),
-	NOT_ENOUGH_COUNT(HttpStatus.CONFLICT, "Not enough count")
+	NOT_ENOUGH_COUNT(HttpStatus.CONFLICT, "Not enough count"),
+	INVALID_ROLE(HttpStatus.CONFLICT, "Invalid Role")
 	;
 
 	private final HttpStatus status;
