@@ -24,4 +24,10 @@ public class LoginController {
 		String token = loginService.login(request.getEmail(), request.getPassword());
 		return ResponseEntity.ok(token);
 	}
+
+	@PostMapping("/logout")
+	public HttpEntity<Void> logout() {
+		loginService.logout();
+		return ResponseEntity.ok(null);
+	}
 }

@@ -4,6 +4,17 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 7200 # 데이터 유지 시간(sec)
+      cache-null-values: true # null 캐싱 여부
+      host: localhost
+      port: 6379
+
+
   jpa:
     open-in-view: false
     defer-datasource-initialization: true
@@ -18,13 +29,7 @@ spring:
     hibernate.default_batch_fetch_size: 100
 
 
-
-#spring.redis.url:
-
-
 jwt:
   secret-key: fastcampus-mini-project-2
   # 2 hours
-  token.expired-time-ms: 7200000
-
-
+  expired-time-ms: 7200000

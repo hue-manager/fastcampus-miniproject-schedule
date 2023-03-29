@@ -22,7 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fastcampus.schedule.BaseEntity;
 import com.fastcampus.schedule.loginlog.LoginLog;
 import com.fastcampus.schedule.schedules.Schedule;
-import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.constant.Role;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -84,7 +84,6 @@ public class User extends BaseEntity implements UserDetails {
 		User user = (User)o;
 		return Objects.equals(id, user.id);
 	}
-	
 
 	@Override
 	public int hashCode() {
@@ -125,7 +124,7 @@ public class User extends BaseEntity implements UserDetails {
 		return true;
 	}
 
-	public boolean isNotSame(String name, String compare) {
+	public boolean isSame(String name, String compare) {
 		return name.equals(compare);
 	}
 }

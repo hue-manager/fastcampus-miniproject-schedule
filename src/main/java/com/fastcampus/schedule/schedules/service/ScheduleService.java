@@ -80,7 +80,7 @@ public class ScheduleService {
 
 		Schedule entity = ScheduleRequest.toEntity(request, user);
 		//변경 후 저장
-		return scheduleRepository.saveAndFlush(schedule);
+		return scheduleRepository.saveAndFlush(entity);
 	}
 
 	public void delete(String userName, Long scheduleId) {
@@ -132,7 +132,6 @@ public class ScheduleService {
 		return getSchedulesByPeriod(userId, period);
 	}
 
-
 	//유저 확인 로직(중복제거위해 메소드로 뺐음)
 	private User getUserOrException(String userName) {
 		return userRepository.findByUserName(userName)
@@ -145,17 +144,16 @@ public class ScheduleService {
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
 
-
 	private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
 		List<Schedule> schedules = scheduleRepository
-				.findSchedulesByUserAndPeriod(
-						userId,
-						period.getStartDate(),
-						period.getEndDate());
+			.findSchedulesByUserAndPeriod(
+				userId,
+				period.getStartDate(),
+				period.getEndDate());
 
 		return schedules.stream()
-				.map(ScheduleResponse::fromEntity)
-				.collect(toList());
+						.map(ScheduleResponse::fromEntity)
+						.collect(toList());
 	}
 
 	private static int getRemainVacationCount(ScheduleRequest request, User user) {
