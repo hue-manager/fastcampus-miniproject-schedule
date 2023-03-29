@@ -29,7 +29,7 @@ public class LoginService {
 	@Value("${jwt.secret-key}")
 	private String secretKey;
 
-	@Value("${jwt.token.expired-time-ms}")
+	@Value("${jwt.expired-time-ms}")
 	private Long expiredTimeMs;
 
 	public String login(String email, String password) {
@@ -43,4 +43,10 @@ public class LoginService {
 		return JwtUtils.generateAccessToken(email, secretKey, expiredTimeMs);
 	}
 
+	}
+
+	public void logout() {
+		// register token in redis to blacklist until expired time
+
+	}
 }

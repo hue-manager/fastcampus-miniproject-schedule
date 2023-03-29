@@ -25,6 +25,4 @@ spring:
 jwt:
   secret-key: fastcampus-mini-project-2
   # 2 hours
-  token.expired-time-ms: 7200000
-
-
+  expired-time-ms: 7200000
