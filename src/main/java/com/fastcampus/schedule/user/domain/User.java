@@ -126,7 +126,7 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	public boolean isNotSame(String name, String compare) {
-		return name.equals(compare);
+		return !name.equals(compare);
 	}
 }
 

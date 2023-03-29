@@ -53,6 +53,7 @@ public class UserService {
 		if (!user.getEmail().equals(request.getEmail())) {
 			user.setEmail(request.getEmail());
 		}
+		userRepository.saveAndFlush(user);
 		return UserResponse.fromEntity(user);
 	}
 

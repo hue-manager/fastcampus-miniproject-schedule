@@ -80,7 +80,7 @@ public class ScheduleService {
 
 		Schedule entity = ScheduleRequest.toEntity(request, user);
 		//변경 후 저장
-		return scheduleRepository.saveAndFlush(schedule);
+		return scheduleRepository.saveAndFlush(entity);
 	}
 
 	public void delete(String userName, Long scheduleId) {
