@@ -18,12 +18,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.repository.ScheduleRepository;
-import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.repository.UserRepository;
 

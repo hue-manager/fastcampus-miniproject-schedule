@@ -1,6 +1,6 @@
 package com.fastcampus.schedule.user.controller.response;
 
-import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.domain.User;
 
 import lombok.AccessLevel;

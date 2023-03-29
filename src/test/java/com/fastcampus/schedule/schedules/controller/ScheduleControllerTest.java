@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
-import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

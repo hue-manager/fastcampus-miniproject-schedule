@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
-import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.controller.requset.SignUpRequest;
 import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
 import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;

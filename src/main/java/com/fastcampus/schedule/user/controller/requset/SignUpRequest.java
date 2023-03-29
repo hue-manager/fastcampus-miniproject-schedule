@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.domain.User;
 
 import lombok.AllArgsConstructor;
