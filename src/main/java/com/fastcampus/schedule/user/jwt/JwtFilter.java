@@ -23,18 +23,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	private final String secretKey;
+    private final String secretKey;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request,
-									HttpServletResponse response,
-									FilterChain chain)
-		throws ServletException, IOException {
-		final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-		final String token;
-		try {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain)
+            throws ServletException, IOException {
+        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String token;
+        try {
 			if (header == null || !header.startsWith("Bearer ")) {
 				log.error("Authorization Header does not start with Bearer {}", request.getRequestURI());
 				chain.doFilter(request, response);
@@ -42,24 +42,25 @@ public class JwtFilter extends OncePerRequestFilter {
 			} else {
 				token = header.split(" ")[1].trim();
 			}
+//            token = header.split(" ")[1].trim();
 
-			String email = JwtUtils.getEmail(token, secretKey);
-			User userDetails = userService.getUserByEmail(email);
+            String email = JwtUtils.getEmail(token, secretKey);
+            User userDetails = userService.getUserByEmail(email);
 
-			if (!JwtUtils.validate(token, userDetails.getUsername(), secretKey)) {
-				chain.doFilter(request, response);
-				return;
-			}
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-				userDetails, null,
-				userDetails.getAuthorities()
-			);
-			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		} catch (RuntimeException e) {
-			chain.doFilter(request, response);
-			return;
-		}
-		chain.doFilter(request, response);
-	}
+            if (!JwtUtils.validate(token, userDetails.getUsername(), secretKey)) {
+                chain.doFilter(request, response);
+                return;
+            }
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails, null,
+                    userDetails.getAuthorities()
+            );
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (RuntimeException e) {
+            chain.doFilter(request, response);
+            return;
+        }
+        chain.doFilter(request, response);
+    }
 }

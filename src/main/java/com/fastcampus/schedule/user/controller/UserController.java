@@ -2,6 +2,7 @@ package com.fastcampus.schedule.user.controller;
 
 import javax.validation.Valid;
 
+import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import com.fastcampus.schedule.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+@Api(tags = "유저")
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @RestController

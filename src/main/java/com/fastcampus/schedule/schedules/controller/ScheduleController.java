@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +27,7 @@ import com.fastcampus.schedule.schedules.service.ScheduleService;
 
 import lombok.RequiredArgsConstructor;
 
+@Api(tags = "스케쥴")
 @RequiredArgsConstructor
 @RequestMapping("/schedules")
 @RestController
