@@ -1,5 +1,7 @@
 package com.fastcampus.schedule.user.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +21,6 @@ import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-
-import javax.validation.Valid;
 
 @RequestMapping("/users")
 @RequiredArgsConstructor

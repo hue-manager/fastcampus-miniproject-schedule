@@ -14,7 +14,7 @@ public class UserRoleRequest {
 	@NotNull
 	private Role role;
 
-	public UserRoleRequest(){
+	public UserRoleRequest() {
 		this.role = role;
 	}
 

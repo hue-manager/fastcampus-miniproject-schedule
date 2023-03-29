@@ -11,7 +11,6 @@ import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.jwt.JwtUtils;
-import com.fastcampus.schedule.user.repository.UserRedisRepository;
 import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class LoginService {
 
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder encoder;
-	private final UserRedisRepository userRedisRepository;
+	// private final UserRedisRepository userRedisRepository;
 
 	@Value("${jwt.secret-key}")
 	private String secretKey;
@@ -38,7 +37,7 @@ public class LoginService {
 			throw new ScheduleException(ErrorCode.INVALID_PASSWORD, "비밀번호를 확인해주세요.");
 		}
 
-		userRedisRepository.setRedisUser(user);
+		// userRedisRepository.setRedisUser(user);
 		return JwtUtils.generateAccessToken(email, secretKey, expiredTimeMs);
 	}
 

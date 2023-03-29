@@ -2,7 +2,6 @@ package com.fastcampus.schedule.user.service;
 
 import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
-import com.fastcampus.schedule.user.repository.UserRedisRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +26,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder encoder;
-	private final UserRedisRepository userRedisRepository;
+	// private final UserRedisRepository userRedisRepository;
 
 	//회원 가입
 	public void signUp(SignUpRequest request) {
@@ -47,7 +46,7 @@ public class UserService {
 	// 유저 정보 수정
 	public UserResponse editUserInfo(Long userId, UserInfoRequest request) {
 		User user = checkExist(userId);
-		if (user.isNotSame(user.getUsername(), request.getUserName())) {
+		if (!user.isSame(user.getUsername(), request.getUserName())) {
 			user.setUserName(request.getUserName());
 		}
 		if (!user.getEmail().equals(request.getEmail())) {
@@ -92,8 +91,8 @@ public class UserService {
 	}
 
 	public User getUserByEmail(String email) {
-		return userRedisRepository.getRedisUser(email).orElseGet(()->
-		 userRepository.findByEmail(email).orElseThrow(() -> new ScheduleException(USER_NOT_FOUND,
-																						 USER_NOT_FOUND.getMessage())));
+		return userRepository.findByEmail(email).orElseThrow(()
+																 -> new ScheduleException(USER_NOT_FOUND,
+																						  USER_NOT_FOUND.getMessage()));
 	}
 }

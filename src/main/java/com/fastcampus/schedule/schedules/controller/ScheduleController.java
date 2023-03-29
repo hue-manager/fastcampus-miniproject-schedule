@@ -80,24 +80,24 @@ public class ScheduleController {
 
 	@GetMapping("/{userId}/week")
 	public List<ScheduleResponse> getSchedulesByWeek(
-			@PathVariable Long userId,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+		@PathVariable Long userId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByWeek(date == null ? LocalDate.now() : date, userId);
 	}
 
 	@GetMapping("/{userId}/month")
 	public List<ScheduleResponse> getSchedulesByMonth(
-			@PathVariable Long userId,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+		@PathVariable Long userId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByMonth(date == null ? LocalDate.now() : date, userId);
 	}
 
 	@GetMapping("/{userId}/year")
 	public List<ScheduleResponse> getSchedulesByYear(
-			@PathVariable Long userId,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+		@PathVariable Long userId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByYear(date == null ? LocalDate.now() : date, userId);
 	}

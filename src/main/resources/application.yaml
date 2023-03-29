@@ -5,7 +5,12 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+
+  cache:
+    type: redis
     redis:
+      time-to-live: 7200 # 데이터 유지 시간(sec)
+      cache-null-values: true # null 캐싱 여부
       host: localhost
       port: 6379
 

@@ -84,7 +84,6 @@ public class User extends BaseEntity implements UserDetails {
 		User user = (User)o;
 		return Objects.equals(id, user.id);
 	}
-	
 
 	@Override
 	public int hashCode() {
@@ -125,8 +124,8 @@ public class User extends BaseEntity implements UserDetails {
 		return true;
 	}
 
-	public boolean isNotSame(String name, String compare) {
-		return !name.equals(compare);
+	public boolean isSame(String name, String compare) {
+		return name.equals(compare);
 	}
 }
 
