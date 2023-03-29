@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
 import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;

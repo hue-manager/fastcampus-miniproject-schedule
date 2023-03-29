@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
-import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.controller.requset.SignUpRequest;
 import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
 import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.domain.User;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

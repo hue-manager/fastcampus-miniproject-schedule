@@ -17,10 +17,10 @@ import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.service.ScheduleService;
-import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.controller.requset.UserLoginRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.domain.User;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.service.LoginService;
 import com.fastcampus.schedule.user.service.UserService;
 

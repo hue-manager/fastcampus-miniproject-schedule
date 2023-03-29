@@ -40,18 +40,4 @@ class SignUpControllerTest {
 		   ).andDo(print())
 		   .andExpect(status().isOk());
 	}
-
-	// @Test
-	// @DisplayName("회원가입시 이미 가입된 유저니름으로 회원가입 하는경우 에러 반환")
-	// public void existUserName_SignUp_ErrorReturn() throws Exception {
-	// 	String userName = "haribo";
-	// 	String email = "aaa@mail.com";
-	// 	String password = "password";
-	//
-	// 	mvc.perform(post("/user/signUp")
-	// 					.contentType(MediaType.APPLICATION_JSON)
-	// 					.content(objectMapper.writeValueAsBytes(new SignUpUserRequest(userName, email, password)))
-	// 	   ).andDo(print())
-	// 	   .andExpect(status().isConflict());
-	// }
 }

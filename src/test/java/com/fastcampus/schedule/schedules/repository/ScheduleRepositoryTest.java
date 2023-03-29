@@ -2,6 +2,7 @@ package com.fastcampus.schedule.schedules.repository;
 
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.constant.Category;
+import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.domain.User;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class ScheduleRepositoryTest {
 
     private Schedule createTestSchedule(User user, LocalDate startDate, LocalDate endDate) {
 
-        Schedule schedule = Schedule.of(user, Category.VACATION, startDate, endDate, "test" );
+        Schedule schedule = Schedule.of(user, Category.VACATION, startDate, endDate, Status.PERMIT, "test");
 
         entityManager.persist(schedule);
         entityManager.flush();

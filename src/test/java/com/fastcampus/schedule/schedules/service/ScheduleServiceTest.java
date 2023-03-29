@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.fastcampus.schedule.schedules.constant.Category;
-import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
-import com.fastcampus.schedule.schedules.util.Period;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +17,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fastcampus.schedule.schedules.Schedule;
+import com.fastcampus.schedule.schedules.constant.Category;
+import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
+import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.repository.ScheduleRepository;
-import com.fastcampus.schedule.user.domain.constant.Role;
+import com.fastcampus.schedule.schedules.util.Period;
 import com.fastcampus.schedule.user.domain.User;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,10 +68,15 @@ public class ScheduleServiceTest {
 		Period period = Period.of(date, date);
 
 		List<Schedule> schedules = new ArrayList<>();
-		schedules.add(Schedule.of(user, Category.WORK, LocalDate.of(2023,3,28),LocalDate.of(2023,3,28),"test1"));
-		schedules.add(Schedule.of(user, Category.WORK, LocalDate.of(2023,3,28),LocalDate.of(2023,3,28),"test2"));
+		schedules.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2023, 3, 28), LocalDate.of(2023, 3, 28), Status.PERMIT,
+						"test1"));
+		schedules.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2023, 3, 28), LocalDate.of(2023, 3, 28), Status.PERMIT,
+						"test2"));
 
-		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, period.getStartDate(), period.getEndDate())).thenReturn(schedules);
+		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, period.getStartDate(),
+															 period.getEndDate())).thenReturn(schedules);
 
 		// when
 		List<ScheduleResponse> scheduleResponses = scheduleService.getSchedulesByDay(date, userId);
@@ -92,12 +98,12 @@ public class ScheduleServiceTest {
 		Period period = Period.of(startOfWeek, startOfWeek.plusDays(6));
 
 		List<Schedule> schedules = new ArrayList<>();
-		schedules.add(Schedule.of(user, Category.WORK, LocalDate.of(2023,3,27),LocalDate.of(2023,4,2),"weekTest"));
+		schedules.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2023, 3, 27), LocalDate.of(2023, 4, 2), Status.PERMIT,
+						"weekTest"));
 
-
-		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, period.getStartDate(), period.getEndDate())).thenReturn(schedules);
-
-
+		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, period.getStartDate(),
+															 period.getEndDate())).thenReturn(schedules);
 
 		// when
 		List<ScheduleResponse> schedulesResponse = scheduleService.getSchedulesByWeek(startOfWeek, userId);
@@ -132,10 +138,12 @@ public class ScheduleServiceTest {
 		Period period = Period.of(date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
 
 		List<Schedule> schedules = new ArrayList<>();
-		schedules.add(Schedule.of(user, Category.WORK, LocalDate.of(2023,4,1),LocalDate.of(2023,4,30),"test1"));
+		schedules.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2023, 4, 1), LocalDate.of(2023, 4, 30), Status.PERMIT,
+						"test1"));
 
 		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, period.getStartDate(), period.getEndDate()))
-				.thenReturn(schedules);
+			.thenReturn(schedules);
 
 		// when
 		List<ScheduleResponse> schedulesResponse = scheduleService.getSchedulesByMonth(date, userId);
@@ -155,27 +163,39 @@ public class ScheduleServiceTest {
 
 		// 2023년 스케줄 생성
 		List<Schedule> schedules2023 = new ArrayList<>();
-		schedules2023.add(Schedule.of(user, Category.WORK, LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 7), "test1"));
-		schedules2023.add(Schedule.of(user, Category.WORK, LocalDate.of(2023, 2, 1), LocalDate.of(2023, 2, 7), "test2"));
-		schedules2023.add(Schedule.of(user, Category.WORK, LocalDate.of(2023, 12, 25), LocalDate.of(2023, 12, 31), "test3"));
+		schedules2023.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 7), Status.PERMIT,
+						"test1"));
+		schedules2023.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2023, 2, 1), LocalDate.of(2023, 2, 7), Status.PERMIT,
+						"test2"));
+		schedules2023.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2023, 12, 25), LocalDate.of(2023, 12, 31), Status.PERMIT,
+						"test3"));
 
 		// 2024년 스케줄 생성
 		List<Schedule> schedules2024 = new ArrayList<>();
-		schedules2024.add(Schedule.of(user, Category.WORK, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 7), "test4"));
-		schedules2024.add(Schedule.of(user, Category.WORK, LocalDate.of(2024, 2, 1), LocalDate.of(2024, 2, 7), "test5"));
+		schedules2024.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 7), Status.PERMIT,"test4"));
+		schedules2024.add(
+			Schedule.of(user, Category.WORK, LocalDate.of(2024, 2, 1), LocalDate.of(2024, 2, 7), Status.PERMIT,"test5"));
 
 		// Repository에서 반환될 스케줄 리스트 설정
 		List<Schedule> schedules = new ArrayList<>();
 		schedules.addAll(schedules2023);
 		schedules.addAll(schedules2024);
-		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 31)))
-				.thenReturn(schedules2023);
-		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 31)))
-				.thenReturn(schedules2024);
+		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, LocalDate.of(2023, 1, 1),
+															 LocalDate.of(2023, 12, 31)))
+			.thenReturn(schedules2023);
+		when(scheduleRepository.findSchedulesByUserAndPeriod(userId, LocalDate.of(2024, 1, 1),
+															 LocalDate.of(2024, 12, 31)))
+			.thenReturn(schedules2024);
 
 		// when
-		List<ScheduleResponse> schedulesResponse2023 = scheduleService.getSchedulesByYear(LocalDate.of(2023, 5, 1), userId);
-		List<ScheduleResponse> schedulesResponse2024 = scheduleService.getSchedulesByYear(LocalDate.of(2024, 5, 1), userId);
+		List<ScheduleResponse> schedulesResponse2023 = scheduleService.getSchedulesByYear(LocalDate.of(2023, 5, 1),
+																						  userId);
+		List<ScheduleResponse> schedulesResponse2024 = scheduleService.getSchedulesByYear(LocalDate.of(2024, 5, 1),
+																						  userId);
 
 		// then
 		assertNotNull(schedulesResponse2023);
