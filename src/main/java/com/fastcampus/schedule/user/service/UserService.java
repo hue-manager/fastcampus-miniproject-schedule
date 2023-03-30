@@ -2,7 +2,6 @@ package com.fastcampus.schedule.user.service;
 
 import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
-import com.fastcampus.schedule.user.controller.request.CheckRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,11 +46,17 @@ public class UserService {
 	// 유저 정보 수정
 	public UserResponse editUserInfo(Long userId, UserInfoRequest request) {
 		User user = checkExist(userId);
-		if (!user.isSame(user.getUsername(), request.getUserName())) {
+		if(request.getEmail() == null || request.getEmail().isEmpty()){
+			user.getEmail();
+			user.isSame(user.getUserName(), request.getUserName());
 			user.setUserName(request.getUserName());
-		}
-		if ((!user.getEmail().equals(request.getEmail()))
-		&& checkEmailDuplicated(request.getEmail()) == true) {
+		} else if (request.getUserName() == null || request.getUserName().isEmpty()) {
+			user.getUserName();
+			user.isSame(user.getEmail(), request.getEmail());
+			checkEmailDuplicated(request.getEmail());
+			user.setEmail(request.getEmail());
+		}else {
+			user.setUserName(request.getUserName());
 			user.setEmail(request.getEmail());
 		}
 		return UserResponse.fromEntity(user);
@@ -60,10 +65,11 @@ public class UserService {
 	// 전체 조회
 	public Page<UserResponse> getUserList(Role role, Pageable pageable) {
 		if (role != null) {
-			userRepository.findAllUsersByRole(role, pageable)
+			return userRepository.findAllUsersByRole(role, pageable)
 						  .map(UserResponse::fromEntity);
 		}
 		return userRepository.findAll(pageable).map(UserResponse::fromEntity);
+
 	}
 
 	// 한명 조회
@@ -101,7 +107,7 @@ public class UserService {
 	public Boolean checkEmailDuplicated(String email) {
 		userRepository.findByEmail(email)
 				.ifPresent(user -> {
-					throw new ScheduleException(DUPLICATED_EMAIL, "");
+					throw new ScheduleException(DUPLICATED_EMAIL, DUPLICATED_EMAIL.getMessage() );
 				});
 		return true;
 	}
