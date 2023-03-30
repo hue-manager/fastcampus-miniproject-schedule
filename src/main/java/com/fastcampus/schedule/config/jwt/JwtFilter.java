@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String token;
         try {
-			if (header == null || !header.startsWith("Bearer ")) {
+			if (header == null || !header.startsWith("Bearer")) {
 				log.error("Authorization Header does not start with Bearer {}", request.getRequestURI());
 				chain.doFilter(request, response);
 				return;

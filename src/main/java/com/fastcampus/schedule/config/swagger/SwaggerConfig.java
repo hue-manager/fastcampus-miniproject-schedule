@@ -43,7 +43,7 @@ public class SwaggerConfig {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return List.of(new SecurityReference("Bearer ", authorizationScopes));
+        return List.of(new SecurityReference("Bearer", authorizationScopes));
     }
 
     private ApiInfo apiInfo() {
