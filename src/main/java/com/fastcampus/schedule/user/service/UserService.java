@@ -2,6 +2,7 @@ package com.fastcampus.schedule.user.service;
 
 import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
+import com.fastcampus.schedule.exception.constant.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
-import com.fastcampus.schedule.user.controller.requset.SignUpRequest;
-import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
-import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
+import com.fastcampus.schedule.user.controller.request.SignUpRequest;
+import com.fastcampus.schedule.user.controller.request.UserInfoRequest;
+import com.fastcampus.schedule.user.controller.request.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.domain.constant.Role;
@@ -36,7 +37,14 @@ public class UserService implements UserDetailsService {
 		checkEmailDuplicated(request.getEmail());
 		userRepository.save(SignUpRequest.toEntity(request, encoder));
 	}
-
+  //회원탈퇴
+  public void deleteAccount(Long userId, String password) {
+      User user = checkExist(userId);
+      if (!encoder.matches(password, user.getPassword())) {
+          throw new ScheduleException(ErrorCode.INVALID_PASSWORD, "비밀번호를 확인해주세요.");
+      }
+      userRepository.deleteById(userId);
+  }
 	// 권한 수정
 	public UserResponse editUserRole(Long userId, UserRoleRequest request) {
 		User user = checkExist(userId);
