@@ -2,6 +2,7 @@ package com.fastcampus.schedule.user.service;
 
 import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
+import com.fastcampus.schedule.user.controller.request.CheckRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
-import com.fastcampus.schedule.user.controller.requset.SignUpRequest;
-import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
-import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
+import com.fastcampus.schedule.user.domain.constant.Role;
+import com.fastcampus.schedule.user.controller.request.SignUpRequest;
+import com.fastcampus.schedule.user.controller.request.UserInfoRequest;
+import com.fastcampus.schedule.user.controller.request.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.domain.constant.Role;
@@ -33,7 +35,7 @@ public class UserService implements UserDetailsService {
 
 	//회원 가입
 	public void signUp(SignUpRequest request) {
-		userRepository.findByEmail(request.getEmail()).ifPresent(user -> new ScheduleException(DUPLICATED_EMAIL, ""));
+		checkEmailDuplicated(request.getEmail());
 		userRepository.save(SignUpRequest.toEntity(request, encoder));
 	}
 
@@ -52,10 +54,10 @@ public class UserService implements UserDetailsService {
 		if (!user.isSame(user.getUsername(), request.getUserName())) {
 			user.setUserName(request.getUserName());
 		}
-		if (!user.getEmail().equals(request.getEmail())) {
+		if ((!user.getEmail().equals(request.getEmail()))
+		&& checkEmailDuplicated(request.getEmail()) == true) {
 			user.setEmail(request.getEmail());
 		}
-		userRepository.saveAndFlush(user);
 		return UserResponse.fromEntity(user);
 	}
 
@@ -99,8 +101,12 @@ public class UserService implements UserDetailsService {
 																						  USER_NOT_FOUND.getMessage()));
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUserName(username).orElseThrow(() -> new ScheduleException(USER_NOT_FOUND, ""));
+	// 이메일 중복 체크
+	public Boolean checkEmailDuplicated(String email) {
+		userRepository.findByEmail(email)
+				.ifPresent(user -> {
+					throw new ScheduleException(DUPLICATED_EMAIL, "");
+				});
+		return true;
 	}
 }

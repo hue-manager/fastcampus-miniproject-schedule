@@ -23,4 +23,14 @@ public class UserInfoRequest {
 	@Size(min = 2, max = 10, message = "최소 2자에서 최대 10자로 입력해주세요")
 	@NotBlank
 	private String userName;
+
+	public UserInfoRequest(String request) {
+		if(request.contains("@")){
+			this.email = request;
+			this.userName = getUserName();
+		}else{
+			this.email = getEmail();
+			this.userName = request;
+		}
+	}
 }
