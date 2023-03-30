@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.user.controller.requset;
+package com.fastcampus.schedule.user.controller.request;
 
 import javax.validation.constraints.NotNull;
 
