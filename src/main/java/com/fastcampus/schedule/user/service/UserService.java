@@ -2,7 +2,6 @@ package com.fastcampus.schedule.user.service;
 
 import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
-import com.fastcampus.schedule.user.controller.request.CheckRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,10 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
-import com.fastcampus.schedule.user.domain.constant.Role;
-import com.fastcampus.schedule.user.controller.request.SignUpRequest;
-import com.fastcampus.schedule.user.controller.request.UserInfoRequest;
-import com.fastcampus.schedule.user.controller.request.UserRoleRequest;
+import com.fastcampus.schedule.user.controller.requset.SignUpRequest;
+import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
+import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.domain.constant.Role;
@@ -55,7 +53,7 @@ public class UserService implements UserDetailsService {
 			user.setUserName(request.getUserName());
 		}
 		if ((!user.getEmail().equals(request.getEmail()))
-		&& checkEmailDuplicated(request.getEmail()) == true) {
+			&& checkEmailDuplicated(request.getEmail()) == true) {
 			user.setEmail(request.getEmail());
 		}
 		return UserResponse.fromEntity(user);
@@ -104,9 +102,16 @@ public class UserService implements UserDetailsService {
 	// 이메일 중복 체크
 	public Boolean checkEmailDuplicated(String email) {
 		userRepository.findByEmail(email)
-				.ifPresent(user -> {
-					throw new ScheduleException(DUPLICATED_EMAIL, "");
-				});
+					  .ifPresent(user -> {
+						  throw new ScheduleException(DUPLICATED_EMAIL, "");
+					  });
 		return true;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userRepository.findByUserName(username).orElseThrow(()
+																	   -> new ScheduleException(USER_NOT_FOUND,
+																								USER_NOT_FOUND.getMessage()));
 	}
 }
