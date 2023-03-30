@@ -4,6 +4,9 @@ import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder encoder;
@@ -94,5 +97,10 @@ public class UserService {
 		return userRepository.findByEmail(email).orElseThrow(()
 																 -> new ScheduleException(USER_NOT_FOUND,
 																						  USER_NOT_FOUND.getMessage()));
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userRepository.findByUserName(username).orElseThrow(() -> new ScheduleException(USER_NOT_FOUND, ""));
 	}
 }
