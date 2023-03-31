@@ -67,7 +67,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.role = role;
 	}
 
-	private User(Long userId, String email, String userName, String password, String phoneNumber, Role role){
+	private User(Long userId, String email, String userName, String password, String phoneNumber, Role role) {
 		this.id = userId;
 		this.email = email;
 		this.userName = userName;
@@ -90,7 +90,7 @@ public class User extends BaseEntity implements UserDetails {
 						  String password,
 						  String phoneNumber,
 						  Role role
-						  ) {
+	) {
 		return new User(userId, email, userName, password, phoneNumber, role);
 	}
 

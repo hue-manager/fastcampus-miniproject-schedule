@@ -1,6 +1,7 @@
 package com.fastcampus.schedule.exception;
 
 import com.fastcampus.schedule.exception.constant.ErrorCode;
+
 import lombok.Getter;
 
 @Getter

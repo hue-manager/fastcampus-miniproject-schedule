@@ -2,7 +2,6 @@ package com.fastcampus.schedule.user.controller;
 
 import javax.validation.Valid;
 
-import io.swagger.annotations.Api;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fastcampus.schedule.user.controller.request.SignUpRequest;
 import com.fastcampus.schedule.user.service.UserService;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "회원가입")

@@ -1,7 +1,6 @@
 package com.fastcampus.schedule.user.controller.request;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -23,10 +22,10 @@ public class UserInfoRequest {
 	private String userName;
 
 	public UserInfoRequest(String request) {
-		if(request.contains("@")){
+		if (request.contains("@")) {
 			this.email = request;
 			this.userName = getUserName();
-		}else{
+		} else {
 			this.email = getEmail();
 			this.userName = request;
 		}

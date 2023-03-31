@@ -1,7 +1,12 @@
 package com.fastcampus.schedule.exception;
 
 import com.fastcampus.schedule.exception.constant.ErrorCode;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -10,6 +15,6 @@ import lombok.*;
 @Builder
 public class ScheduleErrorResponse {
 
-    private ErrorCode errorCode;
-    private String message;
+	private ErrorCode errorCode;
+	private String message;
 }
