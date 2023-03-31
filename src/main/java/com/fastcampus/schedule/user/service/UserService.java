@@ -13,9 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.schedule.exception.ScheduleException;
-import com.fastcampus.schedule.user.controller.request.SignUpRequest;
-import com.fastcampus.schedule.user.controller.request.UserInfoRequest;
-import com.fastcampus.schedule.user.controller.request.UserRoleRequest;
+import com.fastcampus.schedule.user.domain.constant.Role;
+import com.fastcampus.schedule.user.controller.requset.SignUpRequest;
+import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
+import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.domain.constant.Role;
@@ -28,98 +29,94 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserService implements UserDetailsService {
 
-	private final UserRepository userRepository;
-	private final BCryptPasswordEncoder encoder;
-	// private final UserRedisRepository userRedisRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
+    // private final UserRedisRepository userRedisRepository;
 
-	//회원 가입
-	public void signUp(SignUpRequest request) {
-		checkEmailDuplicated(request.getEmail());
-		userRepository.save(SignUpRequest.toEntity(request, encoder));
-	}
-  //회원탈퇴
-  public void deleteAccount(Long userId, String password) {
-      User user = checkExist(userId);
-      if (!encoder.matches(password, user.getPassword())) {
-          throw new ScheduleException(ErrorCode.INVALID_PASSWORD, "비밀번호를 확인해주세요.");
-      }
-      userRepository.deleteById(userId);
-  }
-	// 권한 수정
-	public UserResponse editUserRole(Long userId, UserRoleRequest request) {
-		User user = checkExist(userId);
-		if (!user.getRole().equals(request.getRole())) {
-			user.setRole(request.getRole());
-		}
-		return UserResponse.fromEntity(user);
-	}
+    //회원 가입
+    public void signUp(SignUpRequest request) {
+        checkEmailDuplicated(request.getEmail());
+        userRepository.save(SignUpRequest.toEntity(request, encoder));
+    }
 
-	// 유저 정보 수정
-	public UserResponse editUserInfo(Long userId, UserInfoRequest request) {
-		User user = checkExist(userId);
-		if (!user.isSame(user.getUsername(), request.getUserName())) {
-			user.setUserName(request.getUserName());
-		}
-		if ((!user.getEmail().equals(request.getEmail()))
-			&& checkEmailDuplicated(request.getEmail()) == true) {
-			user.setEmail(request.getEmail());
-		}
-		return UserResponse.fromEntity(user);
-	}
+    // 권한 수정
+    public UserResponse editUserRole(Long userId, UserRoleRequest request) {
+        User user = checkExist(userId);
+        if (!user.getRole().equals(request.getRole())) {
+            user.setRole(request.getRole());
+        }
+        return UserResponse.fromEntity(user);
+    }
 
-	// 전체 조회
-	public Page<UserResponse> getUserList(Role role, Pageable pageable) {
-		if (role != null) {
-			userRepository.findAllUsersByRole(role, pageable)
-						  .map(UserResponse::fromEntity);
-		}
-		return userRepository.findAll(pageable).map(UserResponse::fromEntity);
-	}
+    // 유저 정보 수정
+    public UserResponse editUserInfo(Long userId, UserInfoRequest request) {
+        User user = checkExist(userId);
+        if (request.getEmail() == null || request.getEmail().isEmpty()) {
+            user.setUserName(request.getUserName());
+        } else if (request.getUserName() == null || request.getUserName().isEmpty()) {
+            checkEmailDuplicated(request.getEmail());
+            user.setEmail(request.getEmail());
+        } else {
+            user.setUserName(request.getUserName());
+            user.setEmail(request.getEmail());
+        }
+        return UserResponse.fromEntity(user);
+    }
 
-	// 한명 조회
-	public UserResponse getUser(Long userId) {
-		return userRepository.findById(userId)
-							 .map(UserResponse::fromEntity)
-							 .orElseThrow(()
-											  -> new ScheduleException(USER_NOT_FOUND, USER_NOT_FOUND.getMessage()));
-	}
+    // 전체 조회
+    public Page<UserResponse> getUserList(Role role, Pageable pageable) {
+        if (role != null) {
+            return userRepository.findAllUsersByRole(role, pageable)
+                    .map(UserResponse::fromEntity);
+        }
+        return userRepository.findAll(pageable).map(UserResponse::fromEntity);
 
-	public void confirm(Long userId) {
-		User user = checkExist(userId);
-		if (user.getRole().equals(Role.DEFAULT)) {
-			user.setRole(Role.ROLE_USER);
-		} else {
-			throw new ScheduleException(USER_NOT_FOUND, "");
-		}
-	}
+    }
 
-	// 유저 존재 여부 체크 공통 메서드
-	public User checkExist(Long userId) {
-		User user = userRepository.findById(userId).orElseThrow(()
-																	-> new ScheduleException(USER_NOT_FOUND,
-																							 USER_NOT_FOUND.getMessage()));
-		return user;
-	}
+    // 한명 조회
+    public UserResponse getUser(Long userId) {
+        return userRepository.findById(userId)
+                .map(UserResponse::fromEntity)
+                .orElseThrow(()
+                        -> new ScheduleException(USER_NOT_FOUND, USER_NOT_FOUND.getMessage()));
+    }
 
-	public User getUserByEmail(String email) {
-		return userRepository.findByEmail(email).orElseThrow(()
-																 -> new ScheduleException(USER_NOT_FOUND,
-																						  USER_NOT_FOUND.getMessage()));
-	}
+    public void confirm(Long userId) {
+        User user = checkExist(userId);
+        if (user.getRole().equals(Role.DEFAULT)) {
+            user.setRole(Role.ROLE_USER);
+        } else {
+            throw new ScheduleException(USER_NOT_FOUND, "");
+        }
+    }
 
-	// 이메일 중복 체크
-	public Boolean checkEmailDuplicated(String email) {
-		userRepository.findByEmail(email)
-					  .ifPresent(user -> {
-						  throw new ScheduleException(DUPLICATED_EMAIL, "");
-					  });
-		return true;
-	}
+    // 유저 존재 여부 체크 공통 메서드
+    public User checkExist(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new ScheduleException(USER_NOT_FOUND,
+                USER_NOT_FOUND.getMessage()));
+        return user;
+    }
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUserName(username).orElseThrow(()
-																	   -> new ScheduleException(USER_NOT_FOUND,
-																								USER_NOT_FOUND.getMessage()));
-	}
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(()
+                -> new ScheduleException(USER_NOT_FOUND,
+                USER_NOT_FOUND.getMessage()));
+    }
+
+    // 이메일 중복 체크
+    public Boolean checkEmailDuplicated(String email) {
+        userRepository.findByEmail(email)
+                .ifPresent(user -> {
+                    throw new ScheduleException(DUPLICATED_EMAIL, DUPLICATED_EMAIL.getMessage());
+                });
+        return true;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUserName(username).orElseThrow(()
+                -> new ScheduleException(USER_NOT_FOUND,
+                USER_NOT_FOUND.getMessage()));
+    }
 }
