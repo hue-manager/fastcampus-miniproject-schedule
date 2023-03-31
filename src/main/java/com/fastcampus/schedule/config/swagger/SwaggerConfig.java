@@ -48,7 +48,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Hue-Manger API Test")
+                .title("Hue-Manager API Test")
                 .description("")
                 .version(version)
                 .contact(new Contact("", "", ""))
