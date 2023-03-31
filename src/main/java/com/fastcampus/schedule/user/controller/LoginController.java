@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fastcampus.schedule.user.controller.requset.UserLoginRequest;
+import com.fastcampus.schedule.user.controller.request.UserLoginRequest;
 import com.fastcampus.schedule.user.service.LoginService;
 
 import lombok.RequiredArgsConstructor;
