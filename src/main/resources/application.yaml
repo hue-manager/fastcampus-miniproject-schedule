@@ -1,10 +1,10 @@
 server:
-  port: 8085
+  port: 8080
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/hue-manager
-    username: root
-    password: 1234
+    url: jdbc:mariadb://database-1.cdkzgdsq9v15.ap-northeast-2.rds.amazonaws.com:3306/hue_manager_repo
+    username: gram
+    password: dltmdghks0!
     driver-class-name: org.mariadb.jdbc.Driver
 
   mvc:

@@ -35,6 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String token;
         try {
+
 			if (header == null || !header.startsWith("Bearer ")) {
 				log.error("Authorization Header does not start with Bearer {}", request.getRequestURI());
 				chain.doFilter(request, response);
@@ -42,7 +43,6 @@ public class JwtFilter extends OncePerRequestFilter {
 			} else {
 				token = header.split(" ")[1].trim();
 			}
-//            token = header.split(" ")[1].trim();
 
             String email = JwtUtils.getEmail(token, secretKey);
             User userDetails = userService.getUserByEmail(email);
