@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.user.jwt;
+package com.fastcampus.schedule.config.jwt;
 
 import java.io.IOException;
 

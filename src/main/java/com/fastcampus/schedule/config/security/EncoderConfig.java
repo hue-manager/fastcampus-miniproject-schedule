@@ -1,4 +1,4 @@
-package com.fastcampus.schedule.user.security;
+package com.fastcampus.schedule.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
