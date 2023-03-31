@@ -1,6 +1,5 @@
 package com.fastcampus.schedule.user.controller;
 
-import com.fastcampus.schedule.user.controller.request.CheckRequest;
 import com.fastcampus.schedule.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
