@@ -60,12 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated()
 			.and()
 			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.exceptionHandling()
-			.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-			.and()
-			.addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class);
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			// .and()
+			// .exceptionHandling()
+			// .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+			// .and()
+			// .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
