@@ -19,12 +19,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SignUpController {
 
+	public static final String SIGN_UP_SUCCESS = "회원가입 성공";
 	private final UserService userService;
 
 	@PostMapping("/signup")
-	public HttpEntity<Void> SignUp(@RequestBody @Valid SignUpRequest request) {
+	public HttpEntity<String> SignUp(@RequestBody @Valid SignUpRequest request) {
 		userService.signUp(request);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(SIGN_UP_SUCCESS);
 	}
 
 }
