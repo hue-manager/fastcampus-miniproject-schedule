@@ -1,16 +1,32 @@
 package com.fastcampus.schedule.schedules.repository;
 
-import java.util.Collection;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.fastcampus.schedule.schedules.Schedule;
-import org.springframework.stereotype.Repository;
+import com.fastcampus.schedule.schedules.constant.Status;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    List<Schedule> findAllByUserId(Long userId);
+	Page<Schedule> findAllByUserId(Long userId, Pageable pageable);
+
+	List<Schedule> findAllByUser_Id(Long userId);
+
+
+	@Query("SELECT s FROM Schedule s WHERE s.user.id = :userId AND s.startDate BETWEEN :startDate AND :endDate AND s.endDate BETWEEN :startDate AND :endDate")
+	List<Schedule> findSchedulesByUserAndPeriod(
+			@Param("userId") Long userId,
+			@Param("startDate") LocalDate startDate,
+			@Param("endDate") LocalDate endDate);
+
+	Page<Schedule> findAllByStatus(Pageable pageable, Status status);
+
 }

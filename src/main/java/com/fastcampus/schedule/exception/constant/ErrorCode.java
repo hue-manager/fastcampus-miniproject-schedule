@@ -5,12 +5,14 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
 	// TODO message
-	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, ""),
-	INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, ""),
+	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid Token"),
+	INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Invalid Password"),
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"),
-	DUPLICATED_EMAIL(HttpStatus.CONFLICT, ""),
-	DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, ""),
-
+	SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "Schedule not founded"),
+	DUPLICATED_EMAIL(HttpStatus.CONFLICT, "Email is duplicated"),
+	DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB Error"),
+	NOT_ENOUGH_COUNT(HttpStatus.CONFLICT, "Not enough count"),
+	INVALID_ROLE(HttpStatus.CONFLICT, "Invalid Role")
 	;
 
 	private final HttpStatus status;
