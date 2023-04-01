@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastcampus.schedule.config.response.Response;
 import com.fastcampus.schedule.user.controller.request.SignUpRequest;
 import com.fastcampus.schedule.user.service.UserService;
 
@@ -23,9 +24,9 @@ public class SignUpController {
 	private final UserService userService;
 
 	@PostMapping("/signup")
-	public HttpEntity<String> SignUp(@RequestBody @Valid SignUpRequest request) {
+	public Response<String> SignUp(@RequestBody @Valid SignUpRequest request) {
 		userService.signUp(request);
-		return ResponseEntity.ok(SIGN_UP_SUCCESS);
+		return Response.success(SIGN_UP_SUCCESS);
 	}
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastcampus.schedule.config.response.Response;
 import com.fastcampus.schedule.user.controller.request.DeleteAccountRequest;
 import com.fastcampus.schedule.user.controller.request.UserInfoRequest;
 import com.fastcampus.schedule.user.controller.request.UserRoleRequest;
@@ -36,41 +37,41 @@ public class UserController {
 	//회원탈퇴
 
 	@PostMapping("/{userId}/deleteAccount")
-	public HttpEntity<String> deleteAccount(@PathVariable Long userId,
-											@Valid @RequestBody DeleteAccountRequest request) {
+	public Response<String> deleteAccount(@PathVariable Long userId,
+										  @Valid @RequestBody DeleteAccountRequest request) {
 		userService.deleteAccount(userId, request.getPassword());
-		return ResponseEntity.ok(null);
+		return Response.success("회원탈퇴가 완료되었습니다.");
 	}
 
 	// 유저 권한 수정
 	@PostMapping("/{userId}/editrole")
-	public ResponseEntity<Void> editUserRole(@PathVariable Long userId, @Valid @RequestBody UserRoleRequest request) {
+	public Response<Void> editUserRole(@PathVariable Long userId, @Valid @RequestBody UserRoleRequest request) {
 		userService.editUserRole(userId, request);
-		return ResponseEntity.ok(null);
+		return Response.success();
 	}
 
 	// 유저 정보 수정
 	@PostMapping("/{userId}/editinfo")
-	public ResponseEntity<Void> editUserInfo(@PathVariable Long userId, @Valid @RequestBody UserInfoRequest request) {
+	public Response<Void> editUserInfo(@PathVariable Long userId, @Valid @RequestBody UserInfoRequest request) {
 		userService.editUserInfo(userId, request);
-		return ResponseEntity.ok(null);
+		return Response.success();
 	}
 
 	//유저 전체 정보 조회
 	@GetMapping("/")
-	public ResponseEntity<ModelMap> getUserList(ModelMap modelMap, @RequestParam(required = false) Role role,
+	public Response<ModelMap> getUserList(ModelMap modelMap, @RequestParam(required = false) Role role,
 												Pageable pageable) {
 		Page<UserResponse> userList = userService.getUserList(role, pageable);
 		modelMap.addAttribute("users", userList);
-		return ResponseEntity.ok().body(modelMap);
+		return Response.success(modelMap);
 	}
 
 	// 유저 정보 조회
 	@GetMapping("/{userId}")
-	public ResponseEntity<ModelMap> getUser(@PathVariable Long userId, ModelMap modelMap) {
+	public Response<ModelMap> getUser(@PathVariable Long userId, ModelMap modelMap) {
 		UserResponse user = userService.getUser(userId);
 		modelMap.addAttribute("user", user);
-		return ResponseEntity.ok().body(modelMap);
+		return Response.success(modelMap);
 	}
 
 }

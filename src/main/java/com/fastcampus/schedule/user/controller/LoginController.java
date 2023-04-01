@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastcampus.schedule.config.response.Response;
 import com.fastcampus.schedule.loginlog.service.LoginLogService;
 import com.fastcampus.schedule.user.controller.request.UserLoginRequest;
 import com.fastcampus.schedule.user.domain.User;
@@ -33,14 +34,14 @@ public class LoginController {
 	private final LoginLogService loginLogService;
 
 	@PostMapping("/login")
-	public HttpEntity<Map> login(@RequestBody @Valid UserLoginRequest request,
-								 HttpServletRequest httpServletRequest) {
+	public Response<?> login(@RequestBody @Valid UserLoginRequest request,
+							   HttpServletRequest httpServletRequest) {
 
 		Map<String, String> map = new HashMap<>();
 
 		if (httpServletRequest.getHeader("token") != null) {
 			map.put("message", "이미 로그인 되어있습니다.");
-			return ResponseEntity.status(400).body(map);
+			return Response.error("이미 로그인 되어있습니다.");
 		}
 
 		String token = loginService.login(request.getEmail(), request.getPassword());
@@ -51,12 +52,12 @@ public class LoginController {
 		String clientIp = httpServletRequest.getRemoteAddr();
 		LocalDateTime loginTime = LocalDateTime.now(); // 로그인 시간 기록
 		loginLogService.createLoginLog(user, agent, clientIp, loginTime);
-		return ResponseEntity.ok(map);
+		return Response.success(map);
 	}
 
 	@PostMapping("/logout")
-	public HttpEntity<Void> logout() {
+	public Response<Void> logout() {
 		loginService.logout();
-		return ResponseEntity.ok(null);
+		return Response.success();
 	}
 }

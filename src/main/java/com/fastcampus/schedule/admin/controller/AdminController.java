@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastcampus.schedule.config.response.Response;
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
@@ -38,31 +39,31 @@ public class AdminController {
 	private final ScheduleService scheduleService;
 
 	@PostMapping("/login")
-	public HttpEntity<String> login(@RequestBody @Valid UserLoginRequest request) {
+	public Response<String> login(@RequestBody @Valid UserLoginRequest request) {
 		User user = userService.getUserByEmail(request.getEmail());
 		if (!user.getRole().equals(Role.ROLE_ADMIN)) {
 			throw new ScheduleException(ErrorCode.INVALID_ROLE, "관리자가 아닙니다.");
 		}
 		String token = loginService.login(request.getEmail(), request.getPassword());
-		return ResponseEntity.ok(token);
+		return Response.success(token);
 	}
 
 	@GetMapping("/users")
-	public HttpEntity<Page<UserResponse>> users(Pageable pageable) {
+	public Response<Page<UserResponse>> users(Pageable pageable) {
 		Page<UserResponse> users = userService.getUserList(Role.DEFAULT, pageable);
-		return ResponseEntity.ok(users);
+		return Response.success(users);
 	}
 
 	@GetMapping("/schedules")
-	public HttpEntity<Page<ScheduleResponse>> schedules(Pageable pageable) {
+	public Response<Page<ScheduleResponse>> schedules(Pageable pageable) {
 		Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(pageable);
-		return ResponseEntity.ok(results);
+		return Response.success(results);
 	}
 
 	@PostMapping("/{scheduleId}/confirm")
-	public HttpEntity<Void> confirmSchedule(@PathVariable Long scheduleId) {
+	public Response<Void> confirmSchedule(@PathVariable Long scheduleId) {
 		scheduleService.confirm(scheduleId);
-		return ResponseEntity.ok(null);
+		return Response.success();
 	}
 
 	@PostMapping("/{userId}/confirm")
