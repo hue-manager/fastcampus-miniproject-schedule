@@ -24,12 +24,15 @@ import com.fastcampus.schedule.loginlog.LoginLog;
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.user.domain.constant.Role;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "USERS")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseEntity implements UserDetails {
 
 	@Id
@@ -51,6 +54,10 @@ public class User extends BaseEntity implements UserDetails {
 	private Role role;
 	@Setter
 	private Integer vacationCount = 15;
+	private String position;
+	private String department;
+
+
 	@OneToMany(mappedBy = "user")
 	private List<Schedule> schedules = new ArrayList<>();
 	@OneToMany(mappedBy = "user")
@@ -92,6 +99,20 @@ public class User extends BaseEntity implements UserDetails {
 						  Role role
 	) {
 		return new User(userId, email, userName, password, phoneNumber, role);
+	}
+
+	public static User of(String email,
+						  String userName,
+						  String password,
+						  String phoneNumber,
+						  Role role,
+						  String position,
+						  String department
+	) {
+		User user = new User(email, userName, password, phoneNumber, role);
+		user.position = position;
+		user.department = department;
+		return user;
 	}
 
 	@Override

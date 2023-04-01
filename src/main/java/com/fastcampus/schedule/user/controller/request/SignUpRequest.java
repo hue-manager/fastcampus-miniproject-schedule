@@ -38,11 +38,27 @@ public class SignUpRequest {
 	@Pattern(regexp = "^01(?:0|1|6)-(?:\\d{3}|\\d{4})-\\d{4}$")
 	private String phoneNumber;
 
+	@NotNull
+	private String position;
+
+	@NotNull
+	private String department;
+
 	public static User toEntity(SignUpRequest request, PasswordEncoder encoder) {
 		return User.of(request.email,
 					   request.userName,
 					   encoder.encode(request.password),
 					   request.phoneNumber,
 					   Role.DEFAULT);
+	}
+
+	public static User toEntity(SignUpRequest request, PasswordEncoder encoder, String position, String department) {
+		return User.of(request.email,
+					   request.userName,
+					   encoder.encode(request.password),
+					   request.phoneNumber,
+					   Role.DEFAULT,
+					   position,
+					   department);
 	}
 }
