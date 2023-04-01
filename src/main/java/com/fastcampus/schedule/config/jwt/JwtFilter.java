@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		try {
 
 			if (header == null) {
-				log.error("there is no token in header : ", request.getRequestURI());
+				log.error("there is no token in header : {}", request.getRequestURI());
 				chain.doFilter(request, response);
 				return;
 			} else {
