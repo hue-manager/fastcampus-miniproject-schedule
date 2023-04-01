@@ -1,55 +1,52 @@
 package com.fastcampus.schedule.config.jwt;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.data.util.Pair;
+
+import com.fastcampus.schedule.user.domain.User;
+
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 
 public class JwtUtils {
-	public static Boolean isTokenExpired(String token, String key) {
-		Date expiration = extractAllClaims(token, key).getExpiration();
-		return expiration.before(new Date());
-	}
-
-	public static Boolean validate(String token, String email, String key) {
-		String emailByToken = getEmail(token, key);
-		return emailByToken.equals(email) && !isTokenExpired(token, key);
-	}
-
-	public static String generateAccessToken(String email, String key, long expiredTimeMs) {
-		return doGenerateToken(email, expiredTimeMs, key);
-	}
-
-	public static String getEmail(String token, String key) {
-		return extractAllClaims(token, key).get("email", String.class);
-	}
-
-	public static Claims extractAllClaims(String token, String key) {
+	/**
+	 * 토큰에서 email 찾기
+	 *
+	 * @param token 토큰
+	 * @return email
+	 */
+	public static String getEmail(String token) {
 		return Jwts.parserBuilder()
-				   .setSigningKey(getSigningKey(key))
+				   .setSigningKeyResolver(SigningKeyResolver.instance)
 				   .build()
 				   .parseClaimsJws(token)
-				   .getBody();
+				   .getBody()
+				   .getSubject();
 	}
 
-	private static Key getSigningKey(String secretKey) {
-		byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-		return Keys.hmacShaKeyFor(keyBytes);
-	}
-
-	private static String doGenerateToken(String email, long expireTime, String key) {
-		Claims claims = Jwts.claims();
-		claims.put("email", email);
+	/**
+	 * user로 토큰 생성
+	 * HEADER : alg, kid
+	 * PAYLOAD : sub, iat, exp
+	 * SIGNATURE : JwtKey.getRandomKey로 구한 Secret Key로 HS512 해시
+	 *
+	 * @param user 유저
+	 * @return jwt token
+	 */
+	public static String createToken(User user) {
+		Claims claims = Jwts.claims().setSubject(user.getEmail());
+		Date now = new Date();
+		Pair<String, Key> key = JwtKey.getRandomKey();
 
 		return Jwts.builder()
 				   .setClaims(claims)
-				   .setIssuedAt(new Date(System.currentTimeMillis()))
-				   .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-				   .signWith(getSigningKey(key), SignatureAlgorithm.HS256)
+				   .setIssuedAt(now)
+				   .setExpiration(new Date(now.getTime() + JwtProperties.EXPIRATION_TIME))
+				   .setHeaderParam(JwsHeader.KEY_ID, key.getFirst())
+				   .signWith(key.getSecond())
 				   .compact();
 	}
 }

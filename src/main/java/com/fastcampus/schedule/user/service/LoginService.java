@@ -38,7 +38,7 @@ public class LoginService {
 		}
 
 		// userRedisRepository.setRedisUser(user);
-		return JwtUtils.generateAccessToken(email, secretKey, expiredTimeMs);
+		return JwtUtils.createToken(user);
 	}
 
 	public void logout() {
