@@ -2,10 +2,18 @@ package com.fastcampus.schedule.schedules.service;
 
 import static java.util.stream.Collectors.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fastcampus.schedule.user.domain.constant.Role;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,9 +49,9 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUserId(userId, pageable);
 	}
 
-	public Schedule save(ScheduleRequest request, String userName) {
+	public Schedule save(ScheduleRequest request, String email) {
 
-		User user = getUserOrException(userName);
+		User user = loadUserByEmail(email);
 
 		if (getRemainVacationCount(request, user) < 0) {
 			throw new ScheduleException(ErrorCode.NOT_ENOUGH_COUNT, "연차가 부족합니다.");
@@ -54,6 +62,11 @@ public class ScheduleService {
 		Schedule entity = ScheduleRequest.toEntity(request, user);
 		scheduleRepository.save(entity);
 		return entity;
+	}
+
+	private User loadUserByEmail(String email) {
+		return userRepository.findByEmail(email)
+				.orElseThrow(() -> new ScheduleException(ErrorCode.USER_NOT_FOUND, ""));
 	}
 
 	public Schedule edit(Long scheduleId, ScheduleRequest request, String userName) {
@@ -130,6 +143,50 @@ public class ScheduleService {
 		Period period = Period.of(firstDayOfYear, lastDayOfYear);
 
 		return getSchedulesByPeriod(userId, period);
+	}
+
+	public ByteArrayInputStream createExcelFile(List<Schedule> schedules) {
+		try (Workbook workbook = new XSSFWorkbook();
+			 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+			Sheet sheet = workbook.createSheet("Schedules");
+
+			// 헤더 생성
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("User");
+			headerRow.createCell(1).setCellValue("Category");
+			headerRow.createCell(2).setCellValue("Start Date");
+			headerRow.createCell(3).setCellValue("End Date");
+			headerRow.createCell(4).setCellValue("Status");
+			headerRow.createCell(5).setCellValue("Memo");
+
+			// 데이터 추가
+			for (int i = 0; i < schedules.size(); i++) {
+				Schedule schedule = schedules.get(i);
+				Row row = sheet.createRow(i + 1);
+				row.createCell(0).setCellValue(schedule.getUser().getUsername());
+				row.createCell(1).setCellValue(schedule.getCategory().toString());
+				row.createCell(2).setCellValue(schedule.getStartDate().toString());
+				row.createCell(3).setCellValue(schedule.getEndDate().toString());
+				row.createCell(4).setCellValue(schedule.getStatus().toString());
+				row.createCell(5).setCellValue(schedule.getMemo());
+			}
+
+			workbook.write(out);
+			return new ByteArrayInputStream(out.toByteArray());
+		} catch (IOException e) {
+			throw new RuntimeException("Excel 파일 생성 실패", e);
+		}
+	}
+
+	public List<Schedule> getSchedulesByRole(Role role, Long userId) {
+		if (Role.ROLE_ADMIN.equals(role)) {
+			// 관리자의 경우 모든 스케줄을 가져옴
+			return scheduleRepository.findAll();
+		} else {
+			// 일반 유저의 경우 해당 유저의 스케줄만 가져옴
+			return scheduleRepository.findAllByUser_Id(userId);
+		}
 	}
 
 	//유저 확인 로직(중복제거위해 메소드로 뺐음)
