@@ -46,8 +46,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
 			String email = JwtUtils.getEmail(token, secretKey);
 			User userDetails = userService.getUserByEmail(email);
+			log.info("get user details : {}", userDetails);
 
 			if (!JwtUtils.validate(token, userDetails.getUsername(), secretKey)) {
+				log.error("token is not valid : {}", request.getRequestURI());
 				chain.doFilter(request, response);
 				return;
 			}
@@ -55,8 +57,10 @@ public class JwtFilter extends OncePerRequestFilter {
 				userDetails, null,
 				userDetails.getAuthorities()
 			);
+
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+
 		} catch (RuntimeException e) {
 			chain.doFilter(request, response);
 			return;
