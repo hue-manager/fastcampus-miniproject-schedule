@@ -7,10 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fastcampus.schedule.config.jwt.JwtUtils;
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.user.domain.User;
-import com.fastcampus.schedule.config.jwt.JwtUtils;
 import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

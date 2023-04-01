@@ -2,9 +2,9 @@ package com.fastcampus.schedule.user.controller;
 
 import javax.validation.Valid;
 
-import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fastcampus.schedule.user.controller.requset.UserInfoRequest;
-import com.fastcampus.schedule.user.controller.requset.UserRoleRequest;
+import com.fastcampus.schedule.user.controller.request.DeleteAccountRequest;
+import com.fastcampus.schedule.user.controller.request.UserInfoRequest;
+import com.fastcampus.schedule.user.controller.request.UserRoleRequest;
 import com.fastcampus.schedule.user.controller.response.UserResponse;
 import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.service.UserService;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "유저")
@@ -30,6 +32,15 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
+
+	//회원탈퇴
+
+	@PostMapping("/{userId}/deleteAccount")
+	public HttpEntity<String> deleteAccount(@PathVariable Long userId,
+											@Valid @RequestBody DeleteAccountRequest request) {
+		userService.deleteAccount(userId, request.getPassword());
+		return ResponseEntity.ok(null);
+	}
 
 	// 유저 권한 수정
 	@PostMapping("/{userId}/editrole")

@@ -3,22 +3,20 @@ package com.fastcampus.schedule.schedules.controller;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+
 import com.fastcampus.schedule.config.jwt.JwtUtils;
-import com.fastcampus.schedule.exception.ScheduleException;
-import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.domain.constant.Role;
-import com.fastcampus.schedule.user.repository.UserRepository;
 import com.fastcampus.schedule.user.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,6 +37,7 @@ import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.service.ScheduleService;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "스케쥴")
