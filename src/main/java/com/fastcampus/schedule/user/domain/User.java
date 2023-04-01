@@ -57,7 +57,6 @@ public class User extends BaseEntity implements UserDetails {
 	private String position;
 	private String department;
 
-
 	@OneToMany(mappedBy = "user")
 	private List<Schedule> schedules = new ArrayList<>();
 	@OneToMany(mappedBy = "user")

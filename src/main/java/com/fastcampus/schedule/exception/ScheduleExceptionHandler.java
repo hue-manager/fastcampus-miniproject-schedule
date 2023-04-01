@@ -1,13 +1,10 @@
 package com.fastcampus.schedule.exception;
 
-import static com.fastcampus.schedule.exception.constant.ErrorCode.*;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jdk.jshell.spi.ExecutionControl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
