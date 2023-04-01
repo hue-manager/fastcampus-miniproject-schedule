@@ -35,9 +35,16 @@ public class LoginController {
 	@PostMapping("/login")
 	public HttpEntity<Map> login(@RequestBody @Valid UserLoginRequest request,
 								 HttpServletRequest httpServletRequest) {
+
+		Map<String, String> map = new HashMap<>();
+
+		if (httpServletRequest.getHeader("token") != null) {
+			map.put("message", "이미 로그인 되어있습니다.");
+			return ResponseEntity.status(400).body(map);
+		}
+
 		String token = loginService.login(request.getEmail(), request.getPassword());
 		User user = userService.getUserByEmail(request.getEmail());
-		Map<String, String> map = new HashMap<>();
 		map.put("token", token);
 		map.put("message", LOGIN_SUCCESS);
 		String agent = httpServletRequest.getHeader("User-Agent");
