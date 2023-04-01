@@ -30,10 +30,31 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserService userService;
 	private final UserRepository userRepository;
 
+	private static final String[] PERMIT_URL_ARRAY = {
+		/* swagger v2 */
+		"/v2/api-docs",
+		"/swagger-resources",
+		"/swagger-resources/**",
+		"/configuration/ui",
+		"/configuration/security",
+		"/swagger-ui.html",
+		"/webjars/**",
+		/* swagger v3 */
+		"/v3/api-docs/**",
+		"/swagger-ui/**"
+	};
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// csrf
 		http.csrf().disable();
+
+		// authorization
+		http.authorizeRequests()
+			.antMatchers("/", "/signup", "/login", "/h2-console/**", "/admins/login").permitAll()
+			.antMatchers(PERMIT_URL_ARRAY).permitAll()
+			.antMatchers("/admins/**").hasRole("ADMIN")
+			.anyRequest().authenticated();
 
 		// stateless
 		http.sessionManagement()
@@ -44,12 +65,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 							 UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(new JwtAuthorizationFilter(userRepository), BasicAuthenticationFilter.class);
 
-		// authorization
-		http.authorizeRequests()
-			.antMatchers("/", "/signup", "/login", "/h2-console/**", "/admins/login").permitAll()
-			.antMatchers("/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/v2/api-docs").permitAll()
-			.antMatchers("/admins/**").hasRole("ADMIN")
-			.anyRequest().authenticated();
 	}
 
 	/**
