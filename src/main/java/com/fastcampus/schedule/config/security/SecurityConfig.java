@@ -54,13 +54,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.httpBasic().disable()
 			.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/login", "/signup", "/", "/admins/login").permitAll()
-			.antMatchers(PERMIT_URL_ARRAY).permitAll()
-			.antMatchers("/admins/**").hasRole("ADMIN")
-			.anyRequest().authenticated()
-			.and()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.anyRequest().permitAll();
+			// .authorizeRequests()
+			// .antMatchers("/login", "/signup", "/", "/admins/login").permitAll()
+			// .antMatchers(PERMIT_URL_ARRAY).permitAll()
+			// .antMatchers("/admins/**").hasRole("ADMIN")
+			// .anyRequest().authenticated()
+			// .and()
+			// .sessionManagement()
+			// .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 			// .and()
 			// .exceptionHandling()
 			// .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
