@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,7 +45,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 				Authentication authentication = getUsernamePasswordAuthenticationToken(token);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			} catch (Exception e) {
-				log.info("JWT 토큰이 유효하지 않습니다.");
+				Cookie cookie = new Cookie(JwtProperties.COOKIE_NAME, null);
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
 			}
 		}
 		chain.doFilter(request, response);
