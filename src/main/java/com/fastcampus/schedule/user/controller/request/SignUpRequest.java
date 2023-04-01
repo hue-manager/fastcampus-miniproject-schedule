@@ -49,16 +49,8 @@ public class SignUpRequest {
 					   request.userName,
 					   encoder.encode(request.password),
 					   request.phoneNumber,
-					   Role.DEFAULT);
-	}
-
-	public static User toEntity(SignUpRequest request, PasswordEncoder encoder, String position, String department) {
-		return User.of(request.email,
-					   request.userName,
-					   encoder.encode(request.password),
-					   request.phoneNumber,
 					   Role.DEFAULT,
-					   position,
-					   department);
+					   request.position,
+					   request.department);
 	}
 }
