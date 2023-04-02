@@ -107,35 +107,59 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/{userId}/day")
-	public List<ScheduleResponse> getSchedulesByDay(
-		@PathVariable Long userId,
-		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+	public ResponseEntity<List<ScheduleResponse>> getSchedulesByDay(
+			@PathVariable Long userId,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
-		return scheduleService.getSchedulesByDay(date == null ? LocalDate.now() : date, userId);
+		List<ScheduleResponse> schedules = scheduleService.getSchedulesByDay(date == null ? LocalDate.now() : date, userId);
+
+		if (schedules.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.ok(schedules);
 	}
 
 	@GetMapping("/{userId}/week")
-	public List<ScheduleResponse> getSchedulesByWeek(
-		@PathVariable Long userId,
-		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+	public ResponseEntity<List<ScheduleResponse>> getSchedulesByWeek(
+			@PathVariable Long userId,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
-		return scheduleService.getSchedulesByWeek(date == null ? LocalDate.now() : date, userId);
+		List<ScheduleResponse> schedules = scheduleService.getSchedulesByWeek(date == null ? LocalDate.now() : date, userId);
+
+		if (schedules.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.ok(schedules);
 	}
 
 	@GetMapping("/{userId}/month")
-	public List<ScheduleResponse> getSchedulesByMonth(
-		@PathVariable Long userId,
-		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+	public ResponseEntity<List<ScheduleResponse>> getSchedulesByMonth(
+			@PathVariable Long userId,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
-		return scheduleService.getSchedulesByMonth(date == null ? LocalDate.now() : date, userId);
+		List<ScheduleResponse> schedules = scheduleService.getSchedulesByMonth(date == null ? LocalDate.now() : date, userId);
+
+		if (schedules.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.ok(schedules);
 	}
 
 	@GetMapping("/{userId}/year")
-	public List<ScheduleResponse> getSchedulesByYear(
-		@PathVariable Long userId,
-		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+	public ResponseEntity<List<ScheduleResponse>> getSchedulesByYear(
+			@PathVariable Long userId,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
-		return scheduleService.getSchedulesByYear(date == null ? LocalDate.now() : date, userId);
+		List<ScheduleResponse> schedules = scheduleService.getSchedulesByYear(date == null ? LocalDate.now() : date, userId);
+
+		if (schedules.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.ok(schedules);
 	}
 
 	@GetMapping("/excel") // http://8080/schedules/export?role=ROLE_USER
