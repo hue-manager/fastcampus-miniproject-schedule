@@ -62,7 +62,7 @@ public class UserController {
 	//유저 전체 정보 조회
 	@GetMapping("/")
 	public ResponseEntity<ModelMap> getUserList(ModelMap modelMap, @RequestParam(required = false) Role role,
-												@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+												Pageable pageable) {
 		Page<UserResponse> userList = userService.getUserList(role, pageable);
 		modelMap.addAttribute("users", userList);
 		return ResponseEntity.ok().body(modelMap);

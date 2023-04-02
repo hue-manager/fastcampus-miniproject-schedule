@@ -87,6 +87,9 @@ public class ScheduleController {
 												 HttpServletRequest servletRequest) {
 
 		String email = getEmailByToken(servletRequest);
+
+		// TODO : email이 작성자와 동일한지
+
 		Schedule schedule = scheduleService.edit(scheduleId, request, email);
 
 		return ResponseEntity.ok().body(ScheduleResponse.fromEntity(schedule));  // 수정하고 ScheduleResponse 반환
@@ -96,6 +99,9 @@ public class ScheduleController {
 	public ResponseEntity<Void> delete(@PathVariable Long scheduleId,
 									   HttpServletRequest servletRequest) {
 		String email = getEmailByToken(servletRequest);
+
+		// TODO : email이 작성자와 동일한지
+
 		scheduleService.delete(email, scheduleId);
 
 		return ResponseEntity.ok().build();
