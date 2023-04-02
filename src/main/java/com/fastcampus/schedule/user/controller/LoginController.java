@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.fastcampus.schedule.user.domain.constant.Role;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
 
 	public static final String LOGIN_SUCCESS = "로그인 성공";
+	public static final String WAITING = "계정 미승인";
 	private final LoginService loginService;
 	private final UserService userService;
 	private final LoginLogService loginLogService;
@@ -47,7 +49,11 @@ public class LoginController {
 		User user = userService.getUserByEmail(request.getEmail());
 		map.put("userId", loginService.getUserIdByEmail(request.getEmail()));
 		map.put("token", token);
-		map.put("message", LOGIN_SUCCESS);
+		if(user.getRole().equals(Role.DEFAULT)){
+			map.put("message", WAITING);
+		}else{
+			map.put("message", LOGIN_SUCCESS);
+		}
 		String agent = httpServletRequest.getHeader("User-Agent");
 		String clientIp = httpServletRequest.getRemoteAddr();
 		LocalDateTime loginTime = LocalDateTime.now(); // 로그인 시간 기록
