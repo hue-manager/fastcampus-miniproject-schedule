@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fastcampus.schedule.user.domain.constant.Role;
 import org.apache.poi.ss.usermodel.Row;
@@ -45,12 +46,13 @@ public class ScheduleService {
 		return getScheduleOrException(scheduleId);
 	}
 
-	public Page<Schedule> findAllByUserId(Long userId, Pageable pageable) {
-		return scheduleRepository.findAllByUserId(userId, pageable);
-	}
 
-	public Page<ScheduleResponse> findAll(Pageable pageable) {
-		return scheduleRepository.findAll(pageable).map(ScheduleResponse::fromEntity);
+	public List<ScheduleResponse> findAll() {
+		List<ScheduleResponse> schedules = scheduleRepository.findAll()
+				.stream()
+				.map(ScheduleResponse::fromEntity)
+				.collect(Collectors.toList());
+		return schedules;
 	}
 
 	public Schedule save(ScheduleRequest request, String email) {

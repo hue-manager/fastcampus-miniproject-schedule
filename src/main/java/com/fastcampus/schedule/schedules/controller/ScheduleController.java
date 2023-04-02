@@ -63,8 +63,8 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/all")
-	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(@PageableDefault(size = 5) Pageable pageable) {
-		Page<ScheduleResponse> schedules = scheduleService.findAll(pageable);
+	public HttpEntity<List<ScheduleResponse>> getAllSchedulesList() {
+		List<ScheduleResponse> schedules = scheduleService.findAll();
 		return ResponseEntity.ok(schedules);
 	}
 
