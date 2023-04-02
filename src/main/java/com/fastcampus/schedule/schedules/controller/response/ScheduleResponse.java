@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.constant.Category;
+import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.user.domain.User;
 
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class ScheduleResponse {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private String memo;
+	private Status status;
 
 	public static ScheduleResponse fromEntity(Schedule schedule) {
 		return new ScheduleResponse(
@@ -29,7 +31,8 @@ public class ScheduleResponse {
 			schedule.getUser(),
 			schedule.getStartDate(),
 			schedule.getEndDate(),
-			schedule.getMemo()
+			schedule.getMemo(),
+			schedule.getStatus()
 		);
 	}
 }
