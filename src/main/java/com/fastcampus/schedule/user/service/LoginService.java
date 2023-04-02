@@ -45,4 +45,10 @@ public class LoginService {
 		// register token in redis to blacklist until expired time
 
 	}
+
+	public String getUserIdByEmail(String email) {
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new ScheduleException(USER_NOT_FOUND,
+																							  "존재하지 않는 이메일 입니다."));
+		return user.getId().toString();
+	}
 }

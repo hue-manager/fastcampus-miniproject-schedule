@@ -57,6 +57,7 @@ public class AdminController {
 
 
 		String token = loginService.login(request.getEmail(), request.getPassword());
+		map.put("userId", loginService.getUserIdByEmail(request.getEmail()));
 		map.put("token", token);
 		map.put("message", LOGIN_SUCCESS);
 

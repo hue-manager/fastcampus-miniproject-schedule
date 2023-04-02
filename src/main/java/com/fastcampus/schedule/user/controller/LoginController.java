@@ -45,6 +45,7 @@ public class LoginController {
 
 		String token = loginService.login(request.getEmail(), request.getPassword());
 		User user = userService.getUserByEmail(request.getEmail());
+		map.put("userId", loginService.getUserIdByEmail(request.getEmail()));
 		map.put("token", token);
 		map.put("message", LOGIN_SUCCESS);
 		String agent = httpServletRequest.getHeader("User-Agent");
