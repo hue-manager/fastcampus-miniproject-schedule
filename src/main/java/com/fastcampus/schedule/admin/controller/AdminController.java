@@ -5,7 +5,6 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -41,17 +40,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
 
-	public static final String LOGIN_SUCCESS = "관리자 로그인 성공";
-	public static final String SUCCESS = "성공";
-	private final UserService userService;
-	private final LoginService loginService;
-	private final ScheduleService scheduleService;
+    public static final String LOGIN_SUCCESS = "관리자 로그인 성공";
+    public static final String SUCCESS = "성공";
+    private final UserService userService;
+    private final LoginService loginService;
+    private final ScheduleService scheduleService;
 
-	@PostMapping("/login")
-	public HttpEntity<Map> login(@RequestBody @Valid UserLoginRequest request,
-								 HttpServletRequest httpServletRequest) {
 
-		Map<String, String> map = new HashMap<>();
+    @PostMapping("/login")
+    public HttpEntity<Map> login(@RequestBody @Valid UserLoginRequest request,
+                                 HttpServletRequest httpServletRequest) {
+
+        Map<String, String> map = new HashMap<>();
 
 //		if (httpServletRequest.getHeader("token") != null) {
 //			map.put("message", "이미 관리자 로그인 되어있습니다.");
@@ -59,55 +59,55 @@ public class AdminController {
 //		}
 
 
-		String token = loginService.login(request.getEmail(), request.getPassword());
-		map.put("userId", loginService.getUserIdByEmail(request.getEmail()));
-		map.put("token", token);
-		map.put("message", LOGIN_SUCCESS);
+        String token = loginService.login(request.getEmail(), request.getPassword());
+        map.put("userId", loginService.getUserIdByEmail(request.getEmail()));
+        map.put("token", token);
+        map.put("message", LOGIN_SUCCESS);
 
-		User user = userService.getUserByEmail(request.getEmail());
-		if (!user.getRole().equals(Role.ROLE_ADMIN)) {
-			throw new ScheduleException(ErrorCode.INVALID_ROLE, "관리자가 아닙니다.");
-		}
+        User user = userService.getUserByEmail(request.getEmail());
+        if (!user.getRole().equals(Role.ROLE_ADMIN)) {
+            throw new ScheduleException(ErrorCode.INVALID_ROLE, "관리자가 아닙니다.");
+        }
 
 
-		return ResponseEntity.ok(map);
-	}
+        return ResponseEntity.ok(map);
+    }
 
-	@GetMapping("/users")
-	public HttpEntity<Page<UserResponse>> users(@PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
-		Page<UserResponse> users = userService.getUserList(Role.DEFAULT, pageable);
-		if (users.isEmpty()) {
-			return ResponseEntity.ok()
-					.header("X-Message", "No users found")
-					.body(Page.empty());
-		}
-		return ResponseEntity.ok(users);
-	}
+    @GetMapping("/users")
+    public HttpEntity<Page<UserResponse>> users(@PageableDefault(size = 5) Pageable pageable) {
+        Page<UserResponse> users = userService.getUserList(Role.DEFAULT, pageable);
+        if (users.isEmpty()) {
+            return ResponseEntity.ok()
+                    .header("X-Message", "No users found")
+                    .body(Page.empty());
+        }
+            return ResponseEntity.ok(users);
 
-	@GetMapping("/schedules")
-	public ResponseEntity<Page<ScheduleResponse>> schedules(
-		@PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
-		Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(Status.WAITING,pageable);
-		if (results.isEmpty()) {
-			return ResponseEntity.ok()
-					.header("X-Message", "No schedules found")
-					.body(Page.empty());
-		}
-		return ResponseEntity.ok()
-				.header("X-Message", "Schedules retrieved successfully")
-				.body(results);
-	}
+    }
 
-	@PostMapping("/{scheduleId}/confirm-schedule")
-	public HttpEntity<String> confirmSchedule(@PathVariable Long scheduleId) {
-		scheduleService.confirm(scheduleId);
-		return ResponseEntity.ok(SUCCESS);
-	}
+    @GetMapping("/schedules")
+    public ResponseEntity<Page<ScheduleResponse>> schedules(@PageableDefault(size = 5) Pageable pageable) {
+        Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(Status.WAITING, pageable);
+        if (results.isEmpty()) {
+            return ResponseEntity.ok()
+                    .header("X-Message", "No schedules found")
+                    .body(Page.empty());
+        }
+        return ResponseEntity.ok()
+                .header("X-Message", "Schedules retrieved successfully")
+                .body(results);
+    }
 
-	@PostMapping("/{userId}/confirm-user")
-	public HttpEntity<String> confirmUser(@PathVariable Long userId) {
-		userService.confirm(userId);
-		return ResponseEntity.ok(SUCCESS);
-	}
+    @PostMapping("/{scheduleId}/confirm-schedule")
+    public HttpEntity<String> confirmSchedule(@PathVariable Long scheduleId) {
+        scheduleService.confirm(scheduleId);
+        return ResponseEntity.ok(SUCCESS);
+    }
+
+    @PostMapping("/{userId}/confirm-user")
+    public HttpEntity<String> confirmUser(@PathVariable Long userId) {
+        userService.confirm(userId);
+        return ResponseEntity.ok(SUCCESS);
+    }
 
 }
