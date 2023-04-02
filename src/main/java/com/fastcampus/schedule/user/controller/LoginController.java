@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.fastcampus.schedule.user.domain.constant.Role;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fastcampus.schedule.loginlog.service.LoginLogService;
 import com.fastcampus.schedule.user.controller.request.UserLoginRequest;
 import com.fastcampus.schedule.user.domain.User;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.service.LoginService;
 import com.fastcampus.schedule.user.service.UserService;
 
@@ -49,9 +49,9 @@ public class LoginController {
 		User user = userService.getUserByEmail(request.getEmail());
 		map.put("userId", loginService.getUserIdByEmail(request.getEmail()));
 		map.put("token", token);
-		if(user.getRole().equals(Role.DEFAULT)){
+		if (user.getRole().equals(Role.DEFAULT)) {
 			map.put("message", WAITING);
-		}else{
+		} else {
 			map.put("message", LOGIN_SUCCESS);
 		}
 		String agent = httpServletRequest.getHeader("User-Agent");

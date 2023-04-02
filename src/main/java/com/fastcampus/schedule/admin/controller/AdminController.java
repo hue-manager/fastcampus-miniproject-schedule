@@ -71,7 +71,6 @@ public class AdminController {
 		map.put("token", token);
 		map.put("message", LOGIN_SUCCESS);
 
-
 		return ResponseEntity.ok(map);
 	}
 

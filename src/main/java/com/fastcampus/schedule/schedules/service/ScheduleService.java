@@ -1,7 +1,5 @@
 package com.fastcampus.schedule.schedules.service;
 
-import static java.util.stream.Collectors.*;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,7 +25,6 @@ import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.repository.ScheduleRepository;
-import com.fastcampus.schedule.schedules.util.Period;
 import com.fastcampus.schedule.user.domain.User;
 import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.repository.UserRepository;
@@ -96,7 +93,6 @@ public class ScheduleService {
 		return ScheduleResponse.fromEntity(schedule);
 	}
 
-
 	public void delete(String email, Long scheduleId) {
 
 		User user = loadUserByEmail(email);
@@ -118,7 +114,8 @@ public class ScheduleService {
 	}
 
 	public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
-		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(userId, date, date);
+		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+			userId, date, date);
 		return schedules.stream().map(ScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 
@@ -134,7 +131,8 @@ public class ScheduleService {
 		LocalDate monthStart = date.withDayOfMonth(1);
 		LocalDate monthEnd = date.withDayOfMonth(date.lengthOfMonth());
 
-		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(userId, monthStart, monthEnd);
+		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(
+			userId, monthStart, monthEnd);
 		return schedules.stream().map(ScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 
@@ -142,7 +140,12 @@ public class ScheduleService {
 		LocalDate yearStart = date.withDayOfYear(1);
 		LocalDate yearEnd = date.withDayOfYear(date.lengthOfYear());
 
-		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateBetweenOrUser_IdAndEndDateBetween(userId, yearStart, yearEnd, userId, yearStart, yearEnd);
+		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateBetweenOrUser_IdAndEndDateBetween(userId,
+																												 yearStart,
+																												 yearEnd,
+																												 userId,
+																												 yearStart,
+																												 yearEnd);
 		return schedules.stream().map(ScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 
@@ -202,7 +205,6 @@ public class ScheduleService {
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
 
-
 	private static int getRemainVacationCount(ScheduleRequest request, User user) {
 		return user.getVacationCount() - (request.getEndDate().compareTo(request.getStartDate()) + 1);
 	}
@@ -240,6 +242,7 @@ public class ScheduleService {
 			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "대기 중이 아닙니다.");
 		}
 	}
+
 	private void updateSchedule(Schedule schedule, ScheduleRequest request) {
 		schedule.setStatus(Status.WAITING);
 		schedule.setCategory(Category.valueOf(request.getCategory()));
