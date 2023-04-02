@@ -58,10 +58,6 @@ public class User extends BaseEntity implements UserDetails {
 	private String position;
 	private String department;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-	private List<Schedule> schedules = new ArrayList<>();
-	@OneToMany(mappedBy = "user")
-	private List<LoginLog> logs = new ArrayList<>();
 
 	protected User() {
 	}

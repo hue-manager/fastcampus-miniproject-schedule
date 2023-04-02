@@ -63,8 +63,8 @@ public class ScheduleController {
 
 	@GetMapping("/all")
 	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(Pageable pageable) {
-		Page<Schedule> schedules = scheduleService.findAll(pageable);
-		return ResponseEntity.ok(schedules.map(ScheduleResponse::fromEntity));
+		Page<ScheduleResponse> schedules = scheduleService.findAll(pageable);
+		return ResponseEntity.ok(schedules);
 	}
 
 

@@ -49,8 +49,8 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUserId(userId, pageable);
 	}
 
-	public Page<Schedule> findAll(Pageable pageable) {
-		return scheduleRepository.findAll(pageable);
+	public Page<ScheduleResponse> findAll(Pageable pageable) {
+		return scheduleRepository.findAll(pageable).map(ScheduleResponse::fromEntity);
 	}
 
 	public Schedule save(ScheduleRequest request, String email) {
