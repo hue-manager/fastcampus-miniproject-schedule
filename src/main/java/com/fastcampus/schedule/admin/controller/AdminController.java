@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
+import com.fastcampus.schedule.schedules.constant.Status;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.service.ScheduleService;
 import com.fastcampus.schedule.user.controller.request.UserLoginRequest;
@@ -75,7 +76,7 @@ public class AdminController {
 		Page<UserResponse> users = userService.getUserList(Role.DEFAULT, pageable);
 		if (users.isEmpty()) {
 			return ResponseEntity.ok()
-					.header("message", "No users found")
+					.header("X-Message", "No users found")
 					.body(Page.empty());
 		}
 		return ResponseEntity.ok(users);
@@ -83,14 +84,14 @@ public class AdminController {
 
 	@GetMapping("/schedules")
 	public ResponseEntity<Page<ScheduleResponse>> schedules(Pageable pageable) {
-		Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(pageable);
+		Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(Status.WAITING,pageable);
 		if (results.isEmpty()) {
 			return ResponseEntity.ok()
-					.header("message", "No schedules found")
+					.header("X-Message", "No schedules found")
 					.body(Page.empty());
 		}
 		return ResponseEntity.ok()
-				.header("message", "Schedules retrieved successfully")
+				.header("X-Message", "Schedules retrieved successfully")
 				.body(results);
 	}
 

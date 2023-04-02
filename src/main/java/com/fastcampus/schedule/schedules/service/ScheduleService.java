@@ -16,11 +16,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fastcampus.schedule.config.jwt.JwtUtils;
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.schedules.Schedule;
@@ -229,12 +227,9 @@ public class ScheduleService {
 		}
 	}
 
-	public Page<ScheduleResponse> getSchedulesByStatus(Pageable pageable) {
-		return (Page<ScheduleResponse>)scheduleRepository.findAll(pageable)
-														 .stream()
-														 .filter(schedule -> schedule.getStatus().equals(Status.WAITING))
-														 .map(ScheduleResponse::fromEntity)
-														 .collect(toList());
+	public Page<ScheduleResponse> getSchedulesByStatus(Status status, Pageable pageable) {
+		return scheduleRepository.findAllByStatus(pageable, status)
+								 .map(ScheduleResponse::fromEntity);
 	}
 
 	public void confirm(Long scheduleId) {
