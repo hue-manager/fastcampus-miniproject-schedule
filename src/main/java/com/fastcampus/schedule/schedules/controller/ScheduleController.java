@@ -1,16 +1,25 @@
 package com.fastcampus.schedule.schedules.controller;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.fastcampus.schedule.config.jwt.JwtUtils;
+import com.fastcampus.schedule.user.domain.User;
+import com.fastcampus.schedule.user.domain.constant.Role;
+import com.fastcampus.schedule.user.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +44,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/schedules")
 @RestController
 public class ScheduleController {
-
+	private final UserService userService;
 	private final ScheduleService scheduleService;
 	@Value("${jwt.secret-key}")
 	private String secretKey;
@@ -109,6 +118,29 @@ public class ScheduleController {
 		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByYear(date == null ? LocalDate.now() : date, userId);
+	}
+
+	@GetMapping("/excel") // http://8080/schedules/export?role=ROLE_USER
+	public ResponseEntity<Resource> exportSchedulesToExcel(@RequestParam Role role, HttpServletRequest request) {
+
+		String token = request.getHeader("Authorization").split(" ")[1].trim();
+
+		String email = JwtUtils.getEmail(token, secretKey);
+
+
+		User user = userService.getUserByEmail(email);
+		Long userId = user.getId();
+
+		List<Schedule> schedules = scheduleService.getSchedulesByRole(role, userId);
+
+		ByteArrayInputStream excelFile = scheduleService.createExcelFile(schedules);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Disposition", "attachment; filename=schedules.xlsx");
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(new InputStreamResource(excelFile));
 	}
 
 }
