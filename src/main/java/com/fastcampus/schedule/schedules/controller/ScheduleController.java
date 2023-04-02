@@ -65,8 +65,7 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/all")
-	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(
-		@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(Pageable pageable) {
 
 		Page<ScheduleResponse> schedules = scheduleService.findAll(pageable, Status.PERMIT);
 		return ResponseEntity.ok(schedules);
