@@ -55,7 +55,7 @@ public class ScheduleController {
 		return ResponseEntity.ok(ScheduleResponse.fromEntity(entity));
 	}
 
-	@GetMapping("/schedules/{userId}")
+	@GetMapping("/{userId}")
 	public HttpEntity<Page<ScheduleResponse>> getList(@PathVariable Long userId, Pageable pageable) {
 		Page<Schedule> schedules = scheduleService.findAllByUserId(userId, pageable);
 		return ResponseEntity.ok(schedules.map(ScheduleResponse::fromEntity));

@@ -73,6 +73,11 @@ public class AdminController {
 	@GetMapping("/users")
 	public HttpEntity<Page<UserResponse>> users(Pageable pageable) {
 		Page<UserResponse> users = userService.getUserList(Role.DEFAULT, pageable);
+		if (users.isEmpty()) {
+			return ResponseEntity.ok()
+					.header("message", "No users found")
+					.body(Page.empty());
+		}
 		return ResponseEntity.ok(users);
 	}
 
@@ -81,11 +86,11 @@ public class AdminController {
 		Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(pageable);
 		if (results.isEmpty()) {
 			return ResponseEntity.ok()
-					.header("X-Message", "No schedules found")
+					.header("message", "No schedules found")
 					.body(Page.empty());
 		}
 		return ResponseEntity.ok()
-				.header("X-Message", "Schedules retrieved successfully")
+				.header("message", "Schedules retrieved successfully")
 				.body(results);
 	}
 
