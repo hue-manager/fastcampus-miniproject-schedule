@@ -12,16 +12,12 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<<<<<<< HEAD
 import org.springframework.data.domain.Sort;
-=======
->>>>>>> nofilter
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,38 +51,30 @@ public class ScheduleController {
 
 	@GetMapping("/scheduleinfo/{scheduleId}")
 	public HttpEntity<ScheduleResponse> getInfo(@PathVariable Long scheduleId) {
+
 		Schedule entity = scheduleService.findById(scheduleId);
 		return ResponseEntity.ok(ScheduleResponse.fromEntity(entity));
 	}
 
-<<<<<<< HEAD
 	@GetMapping("/userinfo/{userId}")
 	public HttpEntity<Page<ScheduleResponse>> getList(@PathVariable Long userId,
 													  @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-=======
-	@GetMapping("/{userId}")
-	public HttpEntity<Page<ScheduleResponse>> getList(@PathVariable Long userId,@PageableDefault(size = 5) Pageable pageable) {
->>>>>>> nofilter
-		Page<Schedule> schedules = scheduleService.findAllByUserId(userId, pageable);
-		return ResponseEntity.ok(schedules.map(ScheduleResponse::fromEntity));
+
+		Page<ScheduleResponse> schedules = scheduleService.findAllByUserId(userId, pageable);
+		return ResponseEntity.ok(schedules);
 	}
 
 	@GetMapping("/all")
-<<<<<<< HEAD
 	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(
 		@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
 		Page<ScheduleResponse> schedules = scheduleService.findAll(pageable, Status.PERMIT);
-=======
-	public HttpEntity<List<ScheduleResponse>> getAllSchedulesList() {
-		List<ScheduleResponse> schedules = scheduleService.findAll();
->>>>>>> nofilter
 		return ResponseEntity.ok(schedules);
 	}
 
 	@PostMapping("/save")  //저장
-	public HttpEntity<String > save(@RequestBody @Valid ScheduleRequest request,
-								 HttpServletRequest ServletRequest) {
+	public HttpEntity<String> save(@RequestBody @Valid ScheduleRequest request,
+								   HttpServletRequest ServletRequest) {
 
 		String email = getEmailByToken(ServletRequest);
 		scheduleService.save(request, email);

@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.fastcampus.schedule.user.domain.constant.Role;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -30,6 +28,7 @@ import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.repository.ScheduleRepository;
 import com.fastcampus.schedule.schedules.util.Period;
 import com.fastcampus.schedule.user.domain.User;
+import com.fastcampus.schedule.user.domain.constant.Role;
 import com.fastcampus.schedule.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -46,13 +45,6 @@ public class ScheduleService {
 		return getScheduleOrException(scheduleId);
 	}
 
-
-	public List<ScheduleResponse> findAll() {
-		List<ScheduleResponse> schedules = scheduleRepository.findAll()
-				.stream()
-				.map(ScheduleResponse::fromEntity)
-				.collect(Collectors.toList());
-		return schedules;
 	public Page<ScheduleResponse> findAll(Pageable pageable, Status permit) {
 		return scheduleRepository.findAllByStatus(pageable, permit).map(ScheduleResponse::fromEntity);
 	}
@@ -74,7 +66,7 @@ public class ScheduleService {
 
 	private User loadUserByEmail(String email) {
 		return userRepository.findByEmail(email)
-				.orElseThrow(() -> new ScheduleException(ErrorCode.USER_NOT_FOUND, ""));
+							 .orElseThrow(() -> new ScheduleException(ErrorCode.USER_NOT_FOUND, ""));
 	}
 
 	public Schedule edit(Long scheduleId, ScheduleRequest request, String email) {
@@ -243,5 +235,10 @@ public class ScheduleService {
 		} else {
 			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "대기 중이 아닙니다.");
 		}
+	}
+
+	public Page<ScheduleResponse> findAllByUserId(Long userId, Pageable pageable) {
+		return scheduleRepository.findAllByUserId(userId, pageable)
+								 .map(ScheduleResponse::fromEntity);
 	}
 }
