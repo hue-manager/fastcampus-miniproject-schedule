@@ -52,6 +52,7 @@ public class LoginController {
 		String clientIp = httpServletRequest.getRemoteAddr();
 		LocalDateTime loginTime = LocalDateTime.now(); // 로그인 시간 기록
 		loginLogService.createLoginLog(user, agent, clientIp, loginTime);
+
 		return ResponseEntity.ok(map);
 	}
 
