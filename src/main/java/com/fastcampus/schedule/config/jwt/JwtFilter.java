@@ -36,8 +36,8 @@ public class JwtFilter extends OncePerRequestFilter {
 		final String token;
 		try {
 
-			if (header == null) {
-				log.error("there is no token in header : {}", request.getRequestURI());
+			if (header == null || !header.startsWith("Bearer ")) {
+				log.error("header not started with Bearer : {}", request.getRequestURI());
 				chain.doFilter(request, response);
 				return;
 			} else {
@@ -48,11 +48,12 @@ public class JwtFilter extends OncePerRequestFilter {
 			User userDetails = userService.getUserByEmail(email);
 			log.info("get user details : {}", userDetails);
 
-			if (!JwtUtils.validate(token, userDetails.getUsername(), secretKey)) {
+			if (!JwtUtils.validate(token, userDetails.getEmail(), secretKey)) {
 				log.error("token is not valid : {}", request.getRequestURI());
 				chain.doFilter(request, response);
 				return;
 			}
+
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 				userDetails, null,
 				userDetails.getAuthorities()

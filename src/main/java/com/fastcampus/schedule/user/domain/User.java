@@ -1,6 +1,5 @@
 package com.fastcampus.schedule.user.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -9,11 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -21,8 +18,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fastcampus.schedule.BaseEntity;
-import com.fastcampus.schedule.loginlog.LoginLog;
-import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.user.domain.constant.Role;
 
 import lombok.AccessLevel;
@@ -57,7 +52,6 @@ public class User extends BaseEntity implements UserDetails {
 	private Integer vacationCount = 15;
 	private String position;
 	private String department;
-
 
 	protected User() {
 	}
@@ -128,7 +122,13 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(Role.ROLE_USER.name()));
+		if (role.equals(Role.ROLE_ADMIN)) {
+			return List.of(new SimpleGrantedAuthority("ADMIN"));
+		} else if (role.equals(Role.ROLE_USER)) {
+			return List.of(new SimpleGrantedAuthority("USER"));
+		} else {
+			return List.of(new SimpleGrantedAuthority("GUEST"));
+		}
 	}
 
 	@Override

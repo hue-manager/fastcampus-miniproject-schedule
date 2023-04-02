@@ -54,20 +54,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.httpBasic().disable()
 			.csrf().disable()
 			.authorizeRequests()
-			.anyRequest().permitAll();
+			// .anyRequest().permitAll();
 			// .authorizeRequests()
-			// .antMatchers("/login", "/signup", "/", "/admins/login").permitAll()
-			// .antMatchers(PERMIT_URL_ARRAY).permitAll()
-			// .antMatchers("/admins/**").hasRole("ADMIN")
-			// .anyRequest().authenticated()
-			// .and()
-			// .sessionManagement()
-			// .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-			// .and()
-			// .exceptionHandling()
-			// .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-			// .and()
-			// .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class);
+			.antMatchers("/login", "/signup", "/", "/admins/login").permitAll()
+			.antMatchers(PERMIT_URL_ARRAY).permitAll()
+			.antMatchers("/admins/**").hasAuthority("ADMIN")
+			.anyRequest().hasAnyAuthority("ADMIN", "USER")
+			.and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.exceptionHandling()
+			.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+			.and()
+			.addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
