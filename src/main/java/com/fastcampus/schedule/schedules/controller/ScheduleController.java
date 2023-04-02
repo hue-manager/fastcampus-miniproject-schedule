@@ -3,8 +3,10 @@ package com.fastcampus.schedule.schedules.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,19 +21,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastcampus.schedule.config.jwt.JwtUtils;
 import com.fastcampus.schedule.schedules.Schedule;
 import com.fastcampus.schedule.schedules.controller.request.ScheduleRequest;
 import com.fastcampus.schedule.schedules.controller.response.ScheduleResponse;
 import com.fastcampus.schedule.schedules.service.ScheduleService;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
+@Api(tags = "스케쥴")
 @RequiredArgsConstructor
 @RequestMapping("/schedules")
 @RestController
 public class ScheduleController {
 
 	private final ScheduleService scheduleService;
+	@Value("${jwt.secret-key}")
+	private String secretKey;
 
 	@GetMapping("/{scheduleId}")
 	public HttpEntity<ScheduleResponse> getInfo(@PathVariable Long scheduleId) {
@@ -47,8 +54,10 @@ public class ScheduleController {
 
 	@PostMapping("/save")  //저장
 	public HttpEntity<Void> save(@RequestBody @Valid ScheduleRequest request,
-								 Authentication authentication) {
-		scheduleService.save(request, authentication.getName());
+								 HttpServletRequest ServletRequest) {
+		String token = ServletRequest.getHeader("Authorization").split(" ")[1].trim();
+		String email = JwtUtils.getEmail(token, secretKey);
+		scheduleService.save(request, email);
 		return ResponseEntity.ok(null);
 	}
 
@@ -80,24 +89,24 @@ public class ScheduleController {
 
 	@GetMapping("/{userId}/week")
 	public List<ScheduleResponse> getSchedulesByWeek(
-			@PathVariable Long userId,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+		@PathVariable Long userId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByWeek(date == null ? LocalDate.now() : date, userId);
 	}
 
 	@GetMapping("/{userId}/month")
 	public List<ScheduleResponse> getSchedulesByMonth(
-			@PathVariable Long userId,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+		@PathVariable Long userId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByMonth(date == null ? LocalDate.now() : date, userId);
 	}
 
 	@GetMapping("/{userId}/year")
 	public List<ScheduleResponse> getSchedulesByYear(
-			@PathVariable Long userId,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+		@PathVariable Long userId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
 	) {
 		return scheduleService.getSchedulesByYear(date == null ? LocalDate.now() : date, userId);
 	}

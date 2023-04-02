@@ -22,14 +22,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fastcampus.schedule.BaseEntity;
 import com.fastcampus.schedule.loginlog.LoginLog;
 import com.fastcampus.schedule.schedules.Schedule;
-import com.fastcampus.schedule.user.constant.Role;
+import com.fastcampus.schedule.user.domain.constant.Role;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "USERS")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseEntity implements UserDetails {
 
 	@Id
@@ -51,6 +54,9 @@ public class User extends BaseEntity implements UserDetails {
 	private Role role;
 	@Setter
 	private Integer vacationCount = 15;
+	private String position;
+	private String department;
+
 	@OneToMany(mappedBy = "user")
 	private List<Schedule> schedules = new ArrayList<>();
 	@OneToMany(mappedBy = "user")
@@ -67,12 +73,45 @@ public class User extends BaseEntity implements UserDetails {
 		this.role = role;
 	}
 
+	private User(Long userId, String email, String userName, String password, String phoneNumber, Role role) {
+		this.id = userId;
+		this.email = email;
+		this.userName = userName;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.role = role;
+	}
+
 	public static User of(String email,
 						  String userName,
 						  String password,
 						  String phoneNumber,
 						  Role role) {
 		return new User(email, userName, password, phoneNumber, role);
+	}
+
+	public static User of(Long userId,
+						  String email,
+						  String userName,
+						  String password,
+						  String phoneNumber,
+						  Role role
+	) {
+		return new User(userId, email, userName, password, phoneNumber, role);
+	}
+
+	public static User of(String email,
+						  String userName,
+						  String password,
+						  String phoneNumber,
+						  Role role,
+						  String position,
+						  String department
+	) {
+		User user = new User(email, userName, password, phoneNumber, role);
+		user.position = position;
+		user.department = department;
+		return user;
 	}
 
 	@Override
@@ -84,7 +123,6 @@ public class User extends BaseEntity implements UserDetails {
 		User user = (User)o;
 		return Objects.equals(id, user.id);
 	}
-	
 
 	@Override
 	public int hashCode() {
@@ -93,7 +131,8 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.toString()));
+		return List.of(new SimpleGrantedAuthority(Role.ROLE_USER.name()),
+					   new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()));
 	}
 
 	@Override
@@ -125,7 +164,7 @@ public class User extends BaseEntity implements UserDetails {
 		return true;
 	}
 
-	public boolean isNotSame(String name, String compare) {
+	public boolean isSame(String name, String compare) {
 		return name.equals(compare);
 	}
 }

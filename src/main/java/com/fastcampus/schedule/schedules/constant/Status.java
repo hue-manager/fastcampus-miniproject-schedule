@@ -2,8 +2,7 @@ package com.fastcampus.schedule.schedules.constant;
 
 public enum Status {
 	WAITING("대기"),
-	PERMIT("승인")
-	;
+	PERMIT("승인");
 
 	private String description;
 

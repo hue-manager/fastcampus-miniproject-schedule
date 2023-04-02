@@ -20,12 +20,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 	List<Schedule> findAllByUser_Id(Long userId);
 
-
 	@Query("SELECT s FROM Schedule s WHERE s.user.id = :userId AND s.startDate BETWEEN :startDate AND :endDate AND s.endDate BETWEEN :startDate AND :endDate")
 	List<Schedule> findSchedulesByUserAndPeriod(
-			@Param("userId") Long userId,
-			@Param("startDate") LocalDate startDate,
-			@Param("endDate") LocalDate endDate);
+		@Param("userId") Long userId,
+		@Param("startDate") LocalDate startDate,
+		@Param("endDate") LocalDate endDate);
 
 	Page<Schedule> findAllByStatus(Pageable pageable, Status status);
 

@@ -8,9 +8,11 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fastcampus.schedule.config.jwt.JwtUtils;
 import com.fastcampus.schedule.exception.ScheduleException;
 import com.fastcampus.schedule.exception.constant.ErrorCode;
 import com.fastcampus.schedule.schedules.Schedule;
@@ -41,9 +43,9 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUserId(userId, pageable);
 	}
 
-	public Schedule save(ScheduleRequest request, String userName) {
+	public Schedule save(ScheduleRequest request, String email) {
 
-		User user = getUserOrException(userName);
+		User user = loadUserByEmail(email);
 
 		if (getRemainVacationCount(request, user) < 0) {
 			throw new ScheduleException(ErrorCode.NOT_ENOUGH_COUNT, "연차가 부족합니다.");
@@ -54,6 +56,11 @@ public class ScheduleService {
 		Schedule entity = ScheduleRequest.toEntity(request, user);
 		scheduleRepository.save(entity);
 		return entity;
+	}
+
+	private User loadUserByEmail(String email) {
+		return userRepository.findByEmail(email)
+							 .orElseThrow(() -> new ScheduleException(ErrorCode.USER_NOT_FOUND, ""));
 	}
 
 	public Schedule edit(Long scheduleId, ScheduleRequest request, String userName) {
@@ -80,7 +87,7 @@ public class ScheduleService {
 
 		Schedule entity = ScheduleRequest.toEntity(request, user);
 		//변경 후 저장
-		return scheduleRepository.saveAndFlush(schedule);
+		return scheduleRepository.saveAndFlush(entity);
 	}
 
 	public void delete(String userName, Long scheduleId) {
@@ -132,7 +139,6 @@ public class ScheduleService {
 		return getSchedulesByPeriod(userId, period);
 	}
 
-
 	//유저 확인 로직(중복제거위해 메소드로 뺐음)
 	private User getUserOrException(String userName) {
 		return userRepository.findByUserName(userName)
@@ -145,17 +151,16 @@ public class ScheduleService {
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
 
-
 	private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
 		List<Schedule> schedules = scheduleRepository
-				.findSchedulesByUserAndPeriod(
-						userId,
-						period.getStartDate(),
-						period.getEndDate());
+			.findSchedulesByUserAndPeriod(
+				userId,
+				period.getStartDate(),
+				period.getEndDate());
 
 		return schedules.stream()
-				.map(ScheduleResponse::fromEntity)
-				.collect(toList());
+						.map(ScheduleResponse::fromEntity)
+						.collect(toList());
 	}
 
 	private static int getRemainVacationCount(ScheduleRequest request, User user) {

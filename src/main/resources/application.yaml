@@ -1,13 +1,30 @@
+server:
+  port: 8080
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mariadb://database-1.cdkzgdsq9v15.ap-northeast-2.rds.amazonaws.com:3306/hue_manager_repo
+    username: gram
+    password: dltmdghks0!
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 7200 # 데이터 유지 시간(sec)
+      cache-null-values: true # null 캐싱 여부
+      host: localhost
+      port: 6379
+
+
   jpa:
     open-in-view: false
     defer-datasource-initialization: true
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: update
     show-sql: true
     properties:
       hibernate.format_sql: true
@@ -17,7 +34,8 @@ spring:
     hibernate.format_sql: true
     hibernate.default_batch_fetch_size: 100
 
+
 jwt:
-  secret-key: fastcampus-mini-project-2
+  secret-key: fastcampus-mini-project-2-fastcampus-mini-project-2-fastcampus-mini-project-2
   # 2 hours
-  token.expired-time-ms: 7200000
+  expired-time-ms: 7200000
