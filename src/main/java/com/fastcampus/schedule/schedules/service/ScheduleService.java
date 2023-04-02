@@ -49,8 +49,8 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUserId(userId, pageable);
 	}
 
-	public Page<ScheduleResponse> findAll(Pageable pageable) {
-		return scheduleRepository.findAll(pageable).map(ScheduleResponse::fromEntity);
+	public Page<ScheduleResponse> findAll(Pageable pageable, Status permit) {
+		return scheduleRepository.findAllByStatus(pageable, permit).map(ScheduleResponse::fromEntity);
 	}
 
 	public Schedule save(ScheduleRequest request, String email) {
@@ -73,14 +73,14 @@ public class ScheduleService {
 				.orElseThrow(() -> new ScheduleException(ErrorCode.USER_NOT_FOUND, ""));
 	}
 
-	public Schedule edit(Long scheduleId, ScheduleRequest request, String userName) {
+	public Schedule edit(Long scheduleId, ScheduleRequest request, String email) {
 
-		User user = getUserOrException(userName);
+		User user = loadUserByEmail(email);
 		Schedule schedule = getScheduleOrException(scheduleId);
 
 		//유저와 일정을 쓴 유저와 맞는지 확인
 		if (!schedule.getUser().equals(user)) {
-			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
+			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", email));
 		}
 
 		// 연차 원상복구
@@ -100,9 +100,9 @@ public class ScheduleService {
 		return scheduleRepository.saveAndFlush(entity);
 	}
 
-	public void delete(String userName, Long scheduleId) {
+	public void delete(String email, Long scheduleId) {
 
-		User user = getUserOrException(userName);
+		User user = loadUserByEmail(email);
 		Schedule schedule = getScheduleOrException(scheduleId);
 
 		// 연차 복구
@@ -112,7 +112,7 @@ public class ScheduleService {
 		}
 
 		if (!schedule.getUser().equals(user)) { // 작성자와 유저정보와 같은지 확인
-			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName));
+			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", email));
 		}
 		//작성자로 조회후 삭제
 		scheduleRepository.deleteById(scheduleId);

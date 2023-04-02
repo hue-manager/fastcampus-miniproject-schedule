@@ -5,6 +5,8 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,7 +74,7 @@ public class AdminController {
 	}
 
 	@GetMapping("/users")
-	public HttpEntity<Page<UserResponse>> users(Pageable pageable) {
+	public HttpEntity<Page<UserResponse>> users(@PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
 		Page<UserResponse> users = userService.getUserList(Role.DEFAULT, pageable);
 		if (users.isEmpty()) {
 			return ResponseEntity.ok()
@@ -83,7 +85,8 @@ public class AdminController {
 	}
 
 	@GetMapping("/schedules")
-	public ResponseEntity<Page<ScheduleResponse>> schedules(Pageable pageable) {
+	public ResponseEntity<Page<ScheduleResponse>> schedules(
+		@PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
 		Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(Status.WAITING,pageable);
 		if (results.isEmpty()) {
 			return ResponseEntity.ok()

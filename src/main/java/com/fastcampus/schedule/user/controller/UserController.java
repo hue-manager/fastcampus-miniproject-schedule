@@ -4,6 +4,8 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class UserController {
 
+	public static final String SUCCESS = "성공";
 	private final UserService userService;
 
 	//회원탈퇴
@@ -39,27 +42,27 @@ public class UserController {
 	public HttpEntity<String> deleteAccount(@PathVariable Long userId,
 											@Valid @RequestBody DeleteAccountRequest request) {
 		userService.deleteAccount(userId, request.getPassword());
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(SUCCESS);
 	}
 
 	// 유저 권한 수정
 	@PostMapping("/{userId}/editrole")
-	public ResponseEntity<Void> editUserRole(@PathVariable Long userId, @Valid @RequestBody UserRoleRequest request) {
+	public ResponseEntity<String> editUserRole(@PathVariable Long userId, @Valid @RequestBody UserRoleRequest request) {
 		userService.editUserRole(userId, request);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(SUCCESS);
 	}
 
 	// 유저 정보 수정
 	@PostMapping("/{userId}/editinfo")
-	public ResponseEntity<Void> editUserInfo(@PathVariable Long userId, @Valid @RequestBody UserInfoRequest request) {
+	public ResponseEntity<String> editUserInfo(@PathVariable Long userId, @Valid @RequestBody UserInfoRequest request) {
 		userService.editUserInfo(userId, request);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(SUCCESS);
 	}
 
 	//유저 전체 정보 조회
 	@GetMapping("/")
 	public ResponseEntity<ModelMap> getUserList(ModelMap modelMap, @RequestParam(required = false) Role role,
-												Pageable pageable) {
+												@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 		Page<UserResponse> userList = userService.getUserList(role, pageable);
 		modelMap.addAttribute("users", userList);
 		return ResponseEntity.ok().body(modelMap);
