@@ -61,6 +61,13 @@ public class ScheduleController {
 		return ResponseEntity.ok(schedules.map(ScheduleResponse::fromEntity));
 	}
 
+	@GetMapping("/all")
+	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(Pageable pageable) {
+		Page<Schedule> schedules = scheduleService.findAll(pageable);
+		return ResponseEntity.ok(schedules.map(ScheduleResponse::fromEntity));
+	}
+
+
 	@PostMapping("/save")  //저장
 	public HttpEntity<Void> save(@RequestBody @Valid ScheduleRequest request,
 								 HttpServletRequest ServletRequest) {

@@ -51,6 +51,10 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUserId(userId, pageable);
 	}
 
+	public Page<Schedule> findAll(Pageable pageable) {
+		return scheduleRepository.findAll(pageable);
+	}
+
 	public Schedule save(ScheduleRequest request, String email) {
 
 		User user = loadUserByEmail(email);
