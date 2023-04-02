@@ -82,7 +82,7 @@ public class UserService implements UserDetailsService {
 
 	public void confirm(Long userId) {
 		User user = checkExist(userId);
-		if (user.getRole().equals(Role.DEFAULT)) {
+		if (user.getRole().equals(Role.DEFAULT.name())) {
 			user.setRole(Role.ROLE_USER);
 		} else {
 			throw new ScheduleException(USER_NOT_FOUND, "");

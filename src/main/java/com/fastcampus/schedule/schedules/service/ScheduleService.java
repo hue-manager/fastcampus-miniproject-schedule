@@ -232,7 +232,7 @@ public class ScheduleService {
 
 	public void confirm(Long scheduleId) {
 		Schedule schedule = getScheduleOrException(scheduleId);
-		if (schedule.getStatus().equals(Status.WAITING)) {
+		if (schedule.getStatus().equals(Status.WAITING.name())) {
 			schedule.setStatus(Status.PERMIT);
 		} else {
 			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "");
