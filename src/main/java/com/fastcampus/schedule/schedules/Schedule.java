@@ -69,4 +69,8 @@ public class Schedule extends BaseEntity {
 	public boolean isOverlapped(Period period) {
 		return Period.of(this.getStartDate(), this.getEndDate()).isOverlapped(period);
 	}
+
+	public void deleteUser() {
+		this.user = null;
+	}
 }

@@ -111,6 +111,7 @@ public class ScheduleService {
 			throw new ScheduleException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", email));
 		}
 		//작성자로 조회후 삭제
+		schedule.deleteUser();
 		scheduleRepository.deleteById(scheduleId);
 
 	}
