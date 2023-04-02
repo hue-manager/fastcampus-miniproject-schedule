@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,8 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "로그인")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequiredArgsConstructor
 public class LoginController {
