@@ -82,10 +82,10 @@ public class UserService implements UserDetailsService {
 
 	public void confirm(Long userId) {
 		User user = checkExist(userId);
-		if (user.getRole().equals(Role.DEFAULT.name())) {
+		if (user.getRole().equals(Role.DEFAULT)) {
 			user.setRole(Role.ROLE_USER);
 		} else {
-			throw new ScheduleException(USER_NOT_FOUND, "");
+			throw new ScheduleException(USER_NOT_FOUND, "승인 대기 중이 아닙니다.");
 		}
 	}
 

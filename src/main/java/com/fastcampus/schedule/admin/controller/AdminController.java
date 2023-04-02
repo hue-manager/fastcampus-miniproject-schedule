@@ -39,6 +39,7 @@ import java.util.Map;
 public class AdminController {
 
 	public static final String LOGIN_SUCCESS = "관리자 로그인 성공";
+	public static final String SUCCESS = "성공";
 	private final UserService userService;
 	private final LoginService loginService;
 	private final ScheduleService scheduleService;
@@ -80,16 +81,16 @@ public class AdminController {
 		return ResponseEntity.ok(results);
 	}
 
-	@PostMapping("/{scheduleId}/confirm")
-	public HttpEntity<Void> confirmSchedule(@PathVariable Long scheduleId) {
+	@PostMapping("/{scheduleId}/confirm-schedule")
+	public HttpEntity<String> confirmSchedule(@PathVariable Long scheduleId) {
 		scheduleService.confirm(scheduleId);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(SUCCESS);
 	}
 
-	@PostMapping("/{userId}/confirm")
-	public HttpEntity<Void> confirmUser(@PathVariable Long userId) {
+	@PostMapping("/{userId}/confirm-user")
+	public HttpEntity<String> confirmUser(@PathVariable Long userId) {
 		userService.confirm(userId);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(SUCCESS);
 	}
 
 }

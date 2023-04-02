@@ -226,16 +226,19 @@ public class ScheduleService {
 	}
 
 	public Page<ScheduleResponse> getSchedulesByStatus(Pageable pageable) {
-		return scheduleRepository.findAllByStatus(pageable, Status.WAITING)
-								 .map(ScheduleResponse::fromEntity);
+		return (Page<ScheduleResponse>)scheduleRepository.findAll(pageable)
+														 .stream()
+														 .filter(schedule -> schedule.getStatus().equals(Status.WAITING))
+														 .map(ScheduleResponse::fromEntity)
+														 .collect(toList());
 	}
 
 	public void confirm(Long scheduleId) {
 		Schedule schedule = getScheduleOrException(scheduleId);
-		if (schedule.getStatus().equals(Status.WAITING.name())) {
+		if (schedule.getStatus().equals(Status.WAITING)) {
 			schedule.setStatus(Status.PERMIT);
 		} else {
-			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "");
+			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "대기 중이 아닙니다.");
 		}
 	}
 }
