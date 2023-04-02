@@ -30,7 +30,7 @@ public class SignUpController {
 		return ResponseEntity.ok(SIGN_UP_SUCCESS);
 	}*/
     @PostMapping("/signup")
-    public HttpEntity<Void> SignUp(@RequestBody @Valid SignUpRequest request, BindingResult result) {
+    public HttpEntity<String> SignUp(@RequestBody @Valid SignUpRequest request, BindingResult result) {
         if (!request.getPassword().equals(request.getPassword2())) {
             result.rejectValue("memberPassword2", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
@@ -45,6 +45,6 @@ public class SignUpController {
             e.printStackTrace();
             result.reject("signupFailed", e.getMessage());
         }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(SIGN_UP_SUCCESS);
     }
 }
