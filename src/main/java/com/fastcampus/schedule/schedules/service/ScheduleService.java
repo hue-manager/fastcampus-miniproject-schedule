@@ -241,4 +241,13 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUserId(userId, pageable)
 								 .map(ScheduleResponse::fromEntity);
 	}
+
+	public void reject(Long scheduleId) {
+		Schedule schedule = getScheduleOrException(scheduleId);
+		if (schedule.getStatus().equals(Status.WAITING)) {
+			delete(schedule.getUser().getEmail(), scheduleId);
+		} else {
+			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "대기 중이 아닙니다.");
+		}
+	}
 }

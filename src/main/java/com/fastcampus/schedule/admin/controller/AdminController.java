@@ -114,4 +114,9 @@ public class AdminController {
         return ResponseEntity.ok(SUCCESS);
     }
 
+    @PostMapping("/{scheduleId}/reject-schedule")
+public HttpEntity<String> rejectSchedule(@PathVariable Long scheduleId) {
+        scheduleService.reject(scheduleId);
+        return ResponseEntity.ok(SUCCESS);
+    }
 }
