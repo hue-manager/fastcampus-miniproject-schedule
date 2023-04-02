@@ -17,6 +17,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -56,13 +57,13 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/{userId}")
-	public HttpEntity<Page<ScheduleResponse>> getList(@PathVariable Long userId, Pageable pageable) {
+	public HttpEntity<Page<ScheduleResponse>> getList(@PathVariable Long userId,@PageableDefault(size = 5) Pageable pageable) {
 		Page<Schedule> schedules = scheduleService.findAllByUserId(userId, pageable);
 		return ResponseEntity.ok(schedules.map(ScheduleResponse::fromEntity));
 	}
 
 	@GetMapping("/all")
-	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(Pageable pageable) {
+	public HttpEntity<Page<ScheduleResponse>> getAllSchedulesList(@PageableDefault(size = 5) Pageable pageable) {
 		Page<ScheduleResponse> schedules = scheduleService.findAll(pageable);
 		return ResponseEntity.ok(schedules);
 	}
