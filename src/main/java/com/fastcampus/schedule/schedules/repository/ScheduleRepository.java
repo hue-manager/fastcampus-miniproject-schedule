@@ -21,13 +21,14 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 	List<Schedule> findAllByUser_Id(Long userId);
 
 	Page<Schedule> findAll(Pageable pageable);
-
-	@Query("SELECT s FROM Schedule s WHERE s.user.id = :userId AND s.startDate BETWEEN :startDate AND :endDate AND s.endDate BETWEEN :startDate AND :endDate")
-	List<Schedule> findSchedulesByUserAndPeriod(
-		@Param("userId") Long userId,
-		@Param("startDate") LocalDate startDate,
-		@Param("endDate") LocalDate endDate);
-
 	Page<Schedule> findAllByStatus(Pageable pageable, Status status);
 
+	// 시작 날짜와 종료 날짜가 주어진 범위 내에 있는 경우 조회
+	List<Schedule> findByUser_IdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Long userId, LocalDate startDate, LocalDate endDate);
+	// 시작 날짜가 주어진 범위 내에 있는 경우를 조회
+	List<Schedule> findByUser_IdAndStartDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
+	// 시작 날짜와 종료 날짜가 모두 주어진 범위 내에 있는 경우를 조회
+	List<Schedule> findByUser_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(Long userId, LocalDate startDate, LocalDate endDate);
+	// 시작 날짜가 주어진 범위 내에 있거나 종료 날짜가 주어진 범위 내에 있는 경우 조회
+	List<Schedule> findByUser_IdAndStartDateBetweenOrUser_IdAndEndDateBetween(Long userId, LocalDate startYearRange, LocalDate endYearRange, Long userId2, LocalDate startYearRange2, LocalDate endYearRange2);
 }

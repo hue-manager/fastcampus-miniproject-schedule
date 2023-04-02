@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -117,33 +118,32 @@ public class ScheduleService {
 	}
 
 	public List<ScheduleResponse> getSchedulesByDay(LocalDate date, Long userId) {
-		final Period period = Period.of(date, date);
-		return getSchedulesByPeriod(userId, period);
+		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(userId, date, date);
+		return schedules.stream().map(ScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 
-	public List<ScheduleResponse> getSchedulesByWeek(LocalDate startOfWeek, Long userId) {
-		if (startOfWeek.getDayOfWeek() != DayOfWeek.MONDAY) {
-			throw new IllegalArgumentException("startOfWeek must be a Monday");
-		}
-		final Period period = Period.of(startOfWeek, startOfWeek.plusDays(6));
-		return getSchedulesByPeriod(userId, period);
+	public List<ScheduleResponse> getSchedulesByWeek(LocalDate date, Long userId) {
+		LocalDate weekStart = date.with(DayOfWeek.MONDAY);
+		LocalDate weekEnd = date.with(DayOfWeek.SUNDAY);
+
+		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateBetween(userId, weekStart, weekEnd);
+		return schedules.stream().map(ScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 
 	public List<ScheduleResponse> getSchedulesByMonth(LocalDate date, Long userId) {
-		LocalDate firstDayOfMonth = date.withDayOfMonth(1);
-		LocalDate lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
-		Period period = Period.of(firstDayOfMonth, lastDayOfMonth);
+		LocalDate monthStart = date.withDayOfMonth(1);
+		LocalDate monthEnd = date.withDayOfMonth(date.lengthOfMonth());
 
-		return getSchedulesByPeriod(userId, period);
+		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(userId, monthStart, monthEnd);
+		return schedules.stream().map(ScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 
 	public List<ScheduleResponse> getSchedulesByYear(LocalDate date, Long userId) {
-		int year = date.getYear();
-		LocalDate firstDayOfYear = LocalDate.of(year, 1, 1);
-		LocalDate lastDayOfYear = LocalDate.of(year, 12, 31);
-		Period period = Period.of(firstDayOfYear, lastDayOfYear);
+		LocalDate yearStart = date.withDayOfYear(1);
+		LocalDate yearEnd = date.withDayOfYear(date.lengthOfYear());
 
-		return getSchedulesByPeriod(userId, period);
+		List<Schedule> schedules = scheduleRepository.findByUser_IdAndStartDateBetweenOrUser_IdAndEndDateBetween(userId, yearStart, yearEnd, userId, yearStart, yearEnd);
+		return schedules.stream().map(ScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 
 	public ByteArrayInputStream createExcelFile(List<Schedule> schedules) {
@@ -202,17 +202,6 @@ public class ScheduleService {
 								 .orElseThrow(() -> new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, ""));
 	}
 
-	private List<ScheduleResponse> getSchedulesByPeriod(Long userId, Period period) {
-		List<Schedule> schedules = scheduleRepository
-			.findSchedulesByUserAndPeriod(
-				userId,
-				period.getStartDate(),
-				period.getEndDate());
-
-		return schedules.stream()
-						.map(ScheduleResponse::fromEntity)
-						.collect(toList());
-	}
 
 	private static int getRemainVacationCount(ScheduleRequest request, User user) {
 		return user.getVacationCount() - (request.getEndDate().compareTo(request.getStartDate()) + 1);
