@@ -69,7 +69,7 @@ public class ScheduleService {
 							 .orElseThrow(() -> new ScheduleException(ErrorCode.USER_NOT_FOUND, ""));
 	}
 
-	public Schedule edit(Long scheduleId, ScheduleRequest request, String email) {
+	public ScheduleResponse edit(Long scheduleId, ScheduleRequest request, String email) {
 
 		User user = loadUserByEmail(email);
 		Schedule schedule = getScheduleOrException(scheduleId);
@@ -91,10 +91,10 @@ public class ScheduleService {
 		// 연차 삭감
 		cutVacationCount(request, user);
 
-		Schedule entity = ScheduleRequest.toEntity(request, user);
-		//변경 후 저장
-		return scheduleRepository.saveAndFlush(entity);
+		updateSchedule(schedule, request);
+		return ScheduleResponse.fromEntity(schedule);
 	}
+
 
 	public void delete(String email, Long scheduleId) {
 
@@ -250,5 +250,12 @@ public class ScheduleService {
 		} else {
 			throw new ScheduleException(ErrorCode.SCHEDULE_NOT_FOUND, "대기 중이 아닙니다.");
 		}
+	}
+	private void updateSchedule(Schedule schedule, ScheduleRequest request) {
+		schedule.setStatus(Status.WAITING);
+		schedule.setCategory(Category.valueOf(request.getCategory()));
+		schedule.setMemo(request.getMemo());
+		schedule.setStartDate(request.getStartDate());
+		schedule.setEndDate(request.getEndDate());
 	}
 }

@@ -89,9 +89,9 @@ public class ScheduleController {
 
 		// TODO : email이 작성자와 동일한지
 
-		Schedule schedule = scheduleService.edit(scheduleId, request, email);
+		ScheduleResponse response = scheduleService.edit(scheduleId, request, email);
 
-		return ResponseEntity.ok().body(ScheduleResponse.fromEntity(schedule));  // 수정하고 ScheduleResponse 반환
+		return ResponseEntity.ok().body(response);  // 수정하고 ScheduleResponse 반환
 	}
 
 	@PostMapping("/{scheduleId}/delete") //삭제

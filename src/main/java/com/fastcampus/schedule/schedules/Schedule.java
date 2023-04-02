@@ -25,6 +25,7 @@ import lombok.Setter;
 
 @Getter
 @Entity
+@Setter
 public class Schedule extends BaseEntity {
 
 	@Id
@@ -41,7 +42,7 @@ public class Schedule extends BaseEntity {
 	@Column(nullable = false)
 	private LocalDate endDate;
 	@Enumerated(EnumType.STRING)
-	@Setter
+
 	private Status status;
 	private String memo;
 
