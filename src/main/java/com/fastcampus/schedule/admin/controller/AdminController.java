@@ -1,5 +1,6 @@
 package com.fastcampus.schedule.admin.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -27,24 +28,44 @@ import com.fastcampus.schedule.user.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 @Api(tags = "어드민")
 @RestController
 @RequestMapping("/admins")
 @RequiredArgsConstructor
 public class AdminController {
 
+	public static final String LOGIN_SUCCESS = "관리자 로그인 성공";
 	private final UserService userService;
 	private final LoginService loginService;
 	private final ScheduleService scheduleService;
 
 	@PostMapping("/login")
-	public HttpEntity<String> login(@RequestBody @Valid UserLoginRequest request) {
+	public HttpEntity<Map> login(@RequestBody @Valid UserLoginRequest request,
+								 HttpServletRequest httpServletRequest) {
+
+		Map<String, String> map = new HashMap<>();
+
+//		if (httpServletRequest.getHeader("token") != null) {
+//			map.put("message", "이미 관리자 로그인 되어있습니다.");
+//			return ResponseEntity.status(400).body(map);
+//		}
+
+
+		String token = loginService.login(request.getEmail(), request.getPassword());
+		map.put("token", token);
+		map.put("message", LOGIN_SUCCESS);
+
 		User user = userService.getUserByEmail(request.getEmail());
 		if (!user.getRole().equals(Role.ROLE_ADMIN)) {
 			throw new ScheduleException(ErrorCode.INVALID_ROLE, "관리자가 아닙니다.");
 		}
-		String token = loginService.login(request.getEmail(), request.getPassword());
-		return ResponseEntity.ok(token);
+
+
+		return ResponseEntity.ok(map);
 	}
 
 	@GetMapping("/users")

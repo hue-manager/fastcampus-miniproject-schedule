@@ -26,22 +26,31 @@ public class SignUpRequest {
 	private String email;
 
 	@NotNull
-	@Length(min = 2, max = 10)
+	@Length(min = 2, max = 6)
+	@Pattern(regexp = "^[가-힣]{2,6}$")
 	private String userName;
 
 	@NotNull
-	@Pattern(regexp = "^[a-zA-Z0-9]{8,15}$")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,15}$")
 	private String password;
 
 	@NotNull
-	@Pattern(regexp = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$")
+	@Pattern(regexp = "^01(?:0|1|6)-(?:\\d{3}|\\d{4})-\\d{4}$")
 	private String phoneNumber;
+
+	@NotNull
+	private String position;
+
+	@NotNull
+	private String department;
 
 	public static User toEntity(SignUpRequest request, PasswordEncoder encoder) {
 		return User.of(request.email,
 					   request.userName,
 					   encoder.encode(request.password),
 					   request.phoneNumber,
-					   Role.DEFAULT);
+					   Role.DEFAULT,
+					   request.position,
+					   request.department);
 	}
 }
