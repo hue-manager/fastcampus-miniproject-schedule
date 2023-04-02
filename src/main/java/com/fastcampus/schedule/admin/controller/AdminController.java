@@ -77,9 +77,16 @@ public class AdminController {
 	}
 
 	@GetMapping("/schedules")
-	public HttpEntity<Page<ScheduleResponse>> schedules(Pageable pageable) {
+	public ResponseEntity<Page<ScheduleResponse>> schedules(Pageable pageable) {
 		Page<ScheduleResponse> results = scheduleService.getSchedulesByStatus(pageable);
-		return ResponseEntity.ok(results);
+		if (results.isEmpty()) {
+			return ResponseEntity.ok()
+					.header("X-Message", "No schedules found")
+					.body(Page.empty());
+		}
+		return ResponseEntity.ok()
+				.header("X-Message", "Schedules retrieved successfully")
+				.body(results);
 	}
 
 	@PostMapping("/{scheduleId}/confirm-schedule")
