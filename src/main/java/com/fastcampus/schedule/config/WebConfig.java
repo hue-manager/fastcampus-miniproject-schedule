@@ -15,6 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 				.allowedMethods(ALLOWED_METHOD_NAMES.split(","))
 				.allowedOrigins("*")
 				.allowedHeaders("Access-Control-Allow-Origin")
+				.allowedOrigins("http://13.124.96.231")
 				.allowedOrigins("https://hue-manager.com")
 				.allowedOrigins("http://localhost:3000")
 				.allowedOrigins("http://localhost:5173")
