@@ -3,6 +3,7 @@ package com.fastcampus.schedule.config.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -27,7 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserService userService;
 
 	private static final String[] PERMIT_URL_ARRAY = {
-		/* swagger v2 */
 		"/v2/api-docs",
 		"/swagger-resources",
 		"/swagger-resources/**",
@@ -35,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		"/configuration/security",
 		"/swagger-ui.html",
 		"/webjars/**",
-		/* swagger v3 */
 		"/v3/api-docs/**",
 		"/swagger-ui/**"
 	};
@@ -55,12 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.httpBasic().disable()
 			.csrf().disable()
-			.cors().configurationSource(corsConfigurationSource())
-			.and()
 			.authorizeRequests()
 			.antMatchers("/login", "/signup", "/", "/admins/login").permitAll()
+			.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 			.antMatchers(PERMIT_URL_ARRAY).permitAll()
 			.antMatchers("/admins/**").hasAuthority("ADMIN")
 			.anyRequest().hasAnyAuthority("ADMIN", "USER")
@@ -79,19 +76,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userService);
 	}
 
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-
-		configuration.addAllowedOrigin("*");
-		configuration.addAllowedOrigin("http://localhost:5173");
-		configuration.addAllowedOrigin("http://localhost:3000");
-		configuration.addAllowedHeader("*");
-		configuration.addAllowedMethod("*");
-		configuration.setAllowCredentials(true);
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
 }
