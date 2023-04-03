@@ -15,7 +15,6 @@ import com.fastcampus.schedule.user.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Api(tags = "회원가입")
 @RestController
 @RequiredArgsConstructor

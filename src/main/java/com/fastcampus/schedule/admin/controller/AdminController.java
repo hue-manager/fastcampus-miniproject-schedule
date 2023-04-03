@@ -38,7 +38,6 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "어드민")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/admins")
 @RequiredArgsConstructor

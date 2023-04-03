@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-
 public class CheckController {
 
 	private final UserService userService;

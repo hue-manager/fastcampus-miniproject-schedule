@@ -41,7 +41,6 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "스케쥴")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 @RequestMapping("/schedules")
 @RestController

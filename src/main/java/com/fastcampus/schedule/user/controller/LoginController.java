@@ -25,8 +25,6 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @Api(tags = "로그인")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-
 @RestController
 @RequiredArgsConstructor
 public class LoginController {
